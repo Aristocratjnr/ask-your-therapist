@@ -109,15 +109,16 @@ export default function TherapistProfileScreen() {
 
   const handleSendMessage = async () => {
     try {
+      // Fallback/test user_id for demo
+      const userId = therapist?.user_id || 'demo-therapist';
       if (!userProfile || !therapist) {
         Alert.alert('Error', 'Please sign in to send messages');
         return;
       }
-
       // Create conversation using the messaging context
-      const conversationId = await createConversation(therapist.user_id);
-      
-      router.push(`../chat/${conversationId}`);
+      await createConversation(userId);
+      // Navigate to the messages screen
+      router.push('/(tabs)/messages');
     } catch (error) {
       console.error('Error starting conversation:', error);
       Alert.alert('Error', 'Failed to start conversation');
@@ -125,15 +126,23 @@ export default function TherapistProfileScreen() {
   };
 
   const handleCallTherapist = () => {
-    if (therapist?.user_phone) {
-      Linking.openURL(`tel:${therapist.user_phone}`);
+    // Fallback/test phone for demo
+    const phone = therapist?.user_phone || '+1234567890';
+    if (phone) {
+      Linking.openURL(`tel:${phone}`);
     } else {
       Alert.alert('No Phone', 'Phone number not available');
     }
   };
 
   const handleVideoCall = () => {
-    Alert.alert('Video Call', 'Video calling feature will be implemented soon!');
+    // Use therapist.user_id as channelName for demo
+    const channelName = therapist?.user_id || 'demo-therapist';
+    if (channelName) {
+      router.push(`/video-call/${channelName}`);
+    } else {
+      Alert.alert('Error', 'No channel available for video call');
+    }
   };
 
   const toggleFavorite = () => {
@@ -687,9 +696,12 @@ const styles = StyleSheet.create({
     borderTopColor: '#e2e8f0',
   },
   bookButton: {
-    flex: 1,
     borderRadius: 12,
     overflow: 'hidden',
+    alignSelf: 'center',
+    maxWidth: 320,
+    width: '100%',
+    marginTop: 12,
   },
   bookButtonSolid: {
     backgroundColor: 'rgba(20,184,166,0.12)',
