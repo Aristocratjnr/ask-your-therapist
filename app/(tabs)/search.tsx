@@ -144,7 +144,13 @@ const SearchScreen = () => {
   };
 
   const handleViewProfile = (therapistId: string) => {
-    router.push(`/(tabs)/therapist?id=${therapistId}`);
+    const therapist = therapists.find(t => t.id === therapistId);
+    if (therapist) {
+      router.push({
+        pathname: '/(tabs)/therapist',
+        params: { therapist: JSON.stringify(therapist) }
+      });
+    }
   };
 
   if (loading && !refreshing) {

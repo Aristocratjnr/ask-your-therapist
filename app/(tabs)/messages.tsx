@@ -9,13 +9,23 @@ import {
   Alert,
   Image,
   ActivityIndicator,
-  TextInput
+  TextInput,
+  Dimensions,
+  useWindowDimensions,
+  PixelRatio
 } from 'react-native';
-import { MessageCircle, Search, User, Clock, Plus, ChevronRight } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMessaging } from '@/contexts/MessagingContext';
 import { router } from 'expo-router';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const scaleFont = (size: number) => {
+  const scale = SCREEN_WIDTH / 375;
+  const newSize = size * scale;
+  return Math.round(PixelRatio.roundToNearestPixel(newSize));
+};
 
 interface ConversationUser {
   id: string;
@@ -42,6 +52,7 @@ interface ConversationData {
 }
 
 export default function MessagesScreen() {
+  const { width: screenWidth } = useWindowDimensions();
   const { userProfile } = useAuth();
   const { 
     conversations, 
@@ -116,7 +127,7 @@ export default function MessagesScreen() {
   if (loading && conversations.length === 0) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#10B981" />
+        <ActivityIndicator size="large" color="#14b8a6" />
         <Text style={styles.loadingText}>Loading your messages...</Text>
       </View>
     );
@@ -124,31 +135,52 @@ export default function MessagesScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header with solid background */}
-      <View style={styles.headerSolid}>
-        <View style={styles.profileImageContainer}>
-          <Image
-            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
-            style={styles.profileImage}
-          />
-        </View>
+      {/* Header with profile image */}
+      <LinearGradient
+        colors={['#f8fafc', '#f1f5f9']}
+        style={[styles.header, { paddingTop: screenWidth * 0.15 }]}
+      >
         <View style={styles.headerContent}>
-          <Text style={styles.title}>Messages</Text>
-          <Text style={styles.subtitle}>
+          <View style={styles.profileContainer}>
+            {userProfile?.photo_url ? (
+              <Image
+                source={{ uri: userProfile.photo_url }}
+                style={[styles.profileImage, {
+                  width: screenWidth * 0.22,
+                  height: screenWidth * 0.22,
+                  borderRadius: screenWidth * 0.11,
+                  borderWidth: screenWidth * 0.008
+                }]}
+              />
+            ) : (
+              <View style={[styles.profilePlaceholder, {
+                width: screenWidth * 0.22,
+                height: screenWidth * 0.22,
+                borderRadius: screenWidth * 0.11
+              }]}>
+                <MaterialIcons 
+                  name="person" 
+                  size={screenWidth * 0.1} 
+                  color="#ffffff" 
+                />
+              </View>
+            )}
+          </View>
+          <Text style={[styles.title, { fontSize: scaleFont(28) }]}>Messages</Text>
+          <Text style={[styles.subtitle, { fontSize: scaleFont(16) }]}>
             {userProfile?.role === 'therapist' 
               ? 'Connect with your clients' 
-              : 'Chat with your therapists'
-            }
+              : 'Chat with your therapists'}
           </Text>
         </View>
-      </View>
+      </LinearGradient>
 
       {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBox}>
-          <Search size={20} color="#94a3b8" />
+      <View style={[styles.searchContainer, { paddingHorizontal: screenWidth * 0.06 }]}>
+        <View style={[styles.searchBox, { padding: screenWidth * 0.04 }]}>
+          <MaterialIcons name="search" size={scaleFont(20)} color="#94a3b8" />
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, { fontSize: scaleFont(16) }]}
             placeholder="Search conversations..."
             placeholderTextColor="#94a3b8"
           />
@@ -163,27 +195,38 @@ export default function MessagesScreen() {
           <RefreshControl 
             refreshing={refreshing} 
             onRefresh={onRefresh} 
-            colors={['#10B981']} 
-            tintColor="#10B981"
+            colors={['#14b8a6']} 
+            tintColor="#14b8a6"
           />
         }
       >
         {conversations.length === 0 ? (
-          <View style={styles.emptyState}>
-            <View style={styles.emptyIconContainer}>
-              <MessageCircle size={48} color="#cbd5e1" />
+          <View style={[styles.emptyState, { paddingTop: screenWidth * 0.1 }]}>
+            <View style={[styles.emptyIconContainer, {
+              width: screenWidth * 0.25,
+              height: screenWidth * 0.25,
+              borderRadius: screenWidth * 0.125
+            }]}>
+              <MaterialIcons 
+                name="forum" 
+                size={screenWidth * 0.12} 
+                color="#cbd5e1" 
+              />
             </View>
-            <Text style={styles.emptyTitle}>No messages yet</Text>
-            <Text style={styles.emptyDescription}>
+            <Text style={[styles.emptyTitle, { fontSize: scaleFont(20) }]}>No messages yet</Text>
+            <Text style={[styles.emptyDescription, { fontSize: scaleFont(16) }]}>
               {userProfile?.role === 'therapist' 
                 ? 'When clients message you, conversations will appear here.' 
                 : 'Start a conversation with your therapist to get support.'}
             </Text>
             <TouchableOpacity 
-              style={styles.startConversationButton}
+              style={[styles.startConversationButton, {
+                paddingVertical: screenWidth * 0.04,
+                paddingHorizontal: screenWidth * 0.08
+              }]}
               onPress={handleNewMessage}
             >
-              <Text style={styles.startConversationButtonText}>
+              <Text style={[styles.startConversationButtonText, { fontSize: scaleFont(16) }]}>
                 {userProfile?.role === 'therapist' 
                   ? 'Message a Client' 
                   : 'Find a Therapist'}
@@ -191,7 +234,7 @@ export default function MessagesScreen() {
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={styles.conversationsContainer}>
+          <View style={[styles.conversationsContainer, { paddingHorizontal: screenWidth * 0.06 }]}>
             {conversations.map((conversation) => {
               const otherUser = getOtherUser(conversation);
               const lastMessageTime = conversation.last_message 
@@ -205,7 +248,8 @@ export default function MessagesScreen() {
                   key={conversation.id}
                   style={[
                     styles.conversationCard,
-                    isUnread && styles.unreadConversationCard
+                    isUnread && styles.unreadConversationCard,
+                    { padding: screenWidth * 0.04, marginBottom: screenWidth * 0.03 }
                   ]}
                   onPress={() => handleOpenConversation(conversation)}
                   activeOpacity={0.95}
@@ -213,27 +257,37 @@ export default function MessagesScreen() {
                   {otherUser?.photo_url ? (
                     <Image 
                       source={{ uri: otherUser.photo_url }} 
-                      style={styles.avatarImage} 
+                      style={[styles.avatarImage, {
+                        width: screenWidth * 0.15,
+                        height: screenWidth * 0.15,
+                        borderRadius: screenWidth * 0.075
+                      }]} 
                     />
                   ) : (
-                    <View style={styles.avatarPlaceholder}>
-                      <Text style={styles.avatarText}>
-                        {otherUser?.name?.charAt(0)?.toUpperCase() || 'U'}
-                      </Text>
-                    </View>
+                    <Image
+                      source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+                      style={[styles.avatarImage, {
+                        width: screenWidth * 0.15,
+                        height: screenWidth * 0.15,
+                        borderRadius: screenWidth * 0.075
+                      }]}
+                    />
                   )}
 
-                  <View style={styles.conversationContent}>
+                  <View style={[styles.conversationContent, { marginLeft: screenWidth * 0.04 }]}>
                     <View style={styles.conversationHeader}>
                       <View>
-                        <Text style={styles.userName}>{otherUser?.name || 'User'}</Text>
-                        <Text style={styles.userRole}>
+                        <Text style={[styles.userName, { fontSize: scaleFont(16) }]}>
+                          {otherUser?.name || 'User'}
+                        </Text>
+                        <Text style={[styles.userRole, { fontSize: scaleFont(12) }]}>
                           {otherUser?.role === 'therapist' ? 'Therapist' : 'Client'}
                         </Text>
                       </View>
                       <Text style={[
                         styles.timestamp,
-                        isUnread && styles.unreadTimestamp
+                        isUnread && styles.unreadTimestamp,
+                        { fontSize: scaleFont(12) }
                       ]}>
                         {lastMessageTime}
                       </Text>
@@ -243,20 +297,29 @@ export default function MessagesScreen() {
                       <Text 
                         style={[
                           styles.lastMessage,
-                          isUnread && styles.unreadMessage
+                          isUnread && styles.unreadMessage,
+                          { fontSize: scaleFont(14) }
                         ]}
                         numberOfLines={1}
                       >
                         {conversation.last_message?.message || 'No messages yet'}
                       </Text>
                       
-                      <ChevronRight size={20} color="#cbd5e1" />
+                      <MaterialIcons 
+                        name="chevron-right" 
+                        size={scaleFont(20)} 
+                        color="#cbd5e1" 
+                      />
                     </View>
                   </View>
 
                   {isUnread && (
-                    <View style={styles.unreadBadge}>
-                      <Text style={styles.unreadCount}>
+                    <View style={[styles.unreadBadge, {
+                      width: screenWidth * 0.06,
+                      height: screenWidth * 0.06,
+                      borderRadius: screenWidth * 0.03
+                    }]}>
+                      <Text style={[styles.unreadCount, { fontSize: scaleFont(12) }]}>
                         {conversation.unread_count}
                       </Text>
                     </View>
@@ -270,18 +333,34 @@ export default function MessagesScreen() {
 
       {/* Floating Action Button */}
       <TouchableOpacity 
-        style={styles.newMessageButton}
+        style={[
+          styles.newMessageButton,
+          {
+            backgroundColor: '#f0fdf4',
+            borderRadius: 999,
+            borderWidth: 2,
+            borderColor: '#10B981',
+            padding: screenWidth * 0.04,
+            position: 'absolute',
+            bottom: screenWidth * 0.08,
+            right: screenWidth * 0.06,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.10,
+            shadowRadius: 8,
+            elevation: 8,
+            justifyContent: 'center',
+            alignItems: 'center',
+          },
+        ]}
         onPress={handleNewMessage}
         activeOpacity={0.9}
       >
-        <LinearGradient
-          colors={['#10B981', '#059669']}
-          style={styles.newMessageButtonGradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        >
-          <Plus size={24} color="#ffffff" />
-        </LinearGradient>
+        <MaterialIcons 
+          name="add" 
+          size={scaleFont(28)} 
+          color="#10B981" 
+        />
       </TouchableOpacity>
     </View>
   );
@@ -299,37 +378,52 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   loadingText: {
-    fontSize: 16,
     fontWeight: '300',
     fontFamily: 'System',
     color: '#64748b',
     marginTop: 16,
   },
   header: {
-    paddingTop: 60,
     paddingBottom: 24,
-    paddingHorizontal: 24,
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
+    alignItems: 'center',
   },
   headerContent: {
-    marginTop: 16,
+    alignItems: 'center',
+    width: '100%',
+  },
+  profileContainer: {
+    marginBottom: 16,
+  },
+  profileImage: {
+    borderColor: '#14b8a6',
+    backgroundColor: '#e0f2f1',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
+  },
+  profilePlaceholder: {
+    backgroundColor: '#14b8a6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#ffffff',
   },
   title: {
-    fontSize: 28,
-    fontWeight: '400',
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 4,
   },
   subtitle: {
-    fontSize: 16,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
   },
   searchContainer: {
-    paddingHorizontal: 24,
     paddingTop: 20,
     paddingBottom: 16,
   },
@@ -338,8 +432,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ffffff',
     borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -350,7 +442,6 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
     fontWeight: '300',
     fontFamily: 'System',
     color: '#1e293b',
@@ -362,27 +453,21 @@ const styles = StyleSheet.create({
   emptyState: {
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingTop: 40,
   },
   emptyIconContainer: {
-    width: 96,
-    height: 96,
-    borderRadius: 48,
     backgroundColor: '#f1f5f9',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 24,
   },
   emptyTitle: {
-    fontSize: 20,
-    fontWeight: '400',
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 12,
   },
   emptyDescription: {
-    fontSize: 16,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
     textAlign: 'center',
@@ -390,28 +475,22 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   startConversationButton: {
-    backgroundColor: '#10B981',
+    backgroundColor: '#14b8a6',
     borderRadius: 12,
-    paddingHorizontal: 24,
-    paddingVertical: 14,
   },
   startConversationButtonText: {
-    fontSize: 16,
-    fontWeight: '400',
+    fontWeight: '300',
     fontFamily: 'System',
-    color: '#14b8a6',
+    color: '#ffffff',
   },
   conversationsContainer: {
-    paddingHorizontal: 24,
     paddingBottom: 100,
   },
   conversationCard: {
     backgroundColor: '#ffffff',
     borderRadius: 16,
-    padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -422,26 +501,19 @@ const styles = StyleSheet.create({
   },
   unreadConversationCard: {
     borderLeftWidth: 4,
-    borderLeftColor: '#10B981',
+    borderLeftColor: '#14b8a6',
   },
   avatarImage: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
     marginRight: 16,
   },
   avatarPlaceholder: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#10B981',
+    backgroundColor: '#14b8a6',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
   },
   avatarText: {
-    fontSize: 20,
-    fontFamily: 'Inter-Bold',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   conversationContent: {
@@ -454,28 +526,24 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   userName: {
-    fontSize: 16,
-    fontWeight: '400',
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#1e293b',
   },
   userRole: {
-    fontSize: 12,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
     marginTop: 2,
   },
   timestamp: {
-    fontSize: 12,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#94a3b8',
   },
   unreadTimestamp: {
     color: '#14b8a6',
-    fontWeight: '400',
-    fontFamily: 'System',
+    fontWeight: '300',
   },
   conversationFooter: {
     flexDirection: 'row',
@@ -483,43 +551,31 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   lastMessage: {
-    fontSize: 14,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
     flex: 1,
     marginRight: 8,
   },
   unreadMessage: {
-    fontWeight: '400',
-    fontFamily: 'System',
+    fontWeight: '300',
     color: '#1e293b',
   },
   unreadBadge: {
     position: 'absolute',
     top: 12,
     right: 12,
-    backgroundColor: '#10B981',
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
+    backgroundColor: '#14b8a6',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 6,
   },
   unreadCount: {
-    fontSize: 12,
-    fontWeight: '400',
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#ffffff',
   },
   newMessageButton: {
     position: 'absolute',
-    bottom: 32,
-    right: 24,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
@@ -532,30 +588,5 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  headerSolid: {
-    paddingTop: 60,
-    paddingBottom: 24,
-    paddingHorizontal: 24,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
-    backgroundColor: '#f8fafc',
-  },
-  profileImageContainer: {
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    borderWidth: 2,
-    borderColor: '#14b8a6',
-    backgroundColor: '#e0f2f1',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 3,
   },
 });

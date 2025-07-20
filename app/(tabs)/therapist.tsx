@@ -27,18 +27,34 @@ type TherapistProfile = {
 };
 
 export default function TherapistProfileScreen() {
-  const { id } = useLocalSearchParams();
+  const params = useLocalSearchParams();
   const { userProfile } = useAuth();
   const { createConversation } = useMessaging();
   const [therapist, setTherapist] = useState<TherapistProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  useEffect(() => {
-    loadTherapistProfile();
-  }, [id]);
+  const therapistParam = Array.isArray(params.therapist) ? params.therapist[0] : params.therapist;
+  const idParam = Array.isArray(params.id) ? params.id[0] : params.id;
 
-  const loadTherapistProfile = async () => {
+  useEffect(() => {
+    if (therapistParam) {
+      try {
+        setTherapist(JSON.parse(therapistParam));
+        setLoading(false);
+      } catch (e) {
+        setTherapist(null);
+        setLoading(false);
+      }
+    } else if (idParam) {
+      loadTherapistProfile(idParam);
+    } else {
+      setTherapist(null);
+      setLoading(false);
+    }
+  }, [therapistParam, idParam]);
+
+  const loadTherapistProfile = async (id: string) => {
     try {
       // Fetch therapist profile
       const { data: therapistData, error: therapistError } = await supabase
@@ -302,14 +318,9 @@ export default function TherapistProfileScreen() {
 
       {/* Fixed Bottom Action */}
       <View style={styles.bottomActions}>
-        <TouchableOpacity style={styles.bookButton} onPress={handleBookSession}>
-          <LinearGradient
-            colors={['#14b8a6', '#059669']}
-            style={styles.bookButtonGradient}
-          >
-            <MaterialIcons name="schedule" size={20} color="#ffffff" />
-            <Text style={styles.bookButtonText}>Book Session</Text>
-          </LinearGradient>
+        <TouchableOpacity style={[styles.bookButton, styles.bookButtonSolid]} onPress={handleBookSession}>
+          <MaterialIcons name="schedule" size={20} color="#14b8a6" />
+          <Text style={styles.bookButtonText}>Book Session</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -337,7 +348,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
   },
@@ -350,7 +361,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 18,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
     marginBottom: 24,
@@ -363,7 +374,7 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#ffffff',
   },
@@ -421,7 +432,7 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     fontSize: 36,
-    fontWeight: '400',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#ffffff',
   },
@@ -465,13 +476,13 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 16,
-    fontWeight: '400',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#1e293b',
   },
   reviewCount: {
     fontSize: 14,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
   },
@@ -487,7 +498,7 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 14,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
   },
@@ -529,7 +540,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   actionButtonText: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '400',
     fontFamily: 'System',
     color: '#14b8a6',
@@ -574,7 +585,7 @@ const styles = StyleSheet.create({
   },
   specialtyText: {
     fontSize: 12,
-    fontWeight: '400',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#3b82f6',
   },
@@ -594,13 +605,13 @@ const styles = StyleSheet.create({
   },
   availabilityText: {
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#14b8a6',
   },
   availabilitySubtext: {
     fontSize: 12,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
     marginLeft: 18,
@@ -613,7 +624,7 @@ const styles = StyleSheet.create({
   },
   seeAllText: {
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#14b8a6',
   },
@@ -658,12 +669,12 @@ const styles = StyleSheet.create({
   },
   reviewDate: {
     fontSize: 12,
-    fontWeight: '300',
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#64748b',
   },
   reviewText: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '300',
     fontFamily: 'System',
     color: '#64748b',
@@ -676,20 +687,24 @@ const styles = StyleSheet.create({
     borderTopColor: '#e2e8f0',
   },
   bookButton: {
-    borderRadius: 16,
+    flex: 1,
+    borderRadius: 12,
     overflow: 'hidden',
   },
-  bookButtonGradient: {
+  bookButtonSolid: {
+    backgroundColor: 'rgba(20,184,166,0.12)',
+    borderWidth: 1,
+    borderColor: '#14b8a6',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    gap: 10,
+    padding: 14,
   },
   bookButtonText: {
     fontSize: 16,
     fontWeight: '400',
     fontFamily: 'System',
-    color: '#ffffff',
+    color: '#14b8a6',
+    marginLeft: 8,
   },
 });
