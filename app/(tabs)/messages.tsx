@@ -299,7 +299,8 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginTop: 16,
   },
@@ -315,14 +316,16 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontFamily: 'Inter-Bold',
-    color: '#ffffff',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#1e293b',
     marginBottom: 4,
   },
   subtitle: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
-    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '300',
+    fontFamily: 'System',
+    color: '#64748b',
   },
   searchContainer: {
     paddingHorizontal: 24,
@@ -341,11 +344,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.05,
     shadowRadius: 8,
     elevation: 2,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
   },
   searchInput: {
     flex: 1,
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
     marginLeft: 8,
   },
@@ -368,13 +374,15 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 20,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 12,
   },
   emptyDescription: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     textAlign: 'center',
     lineHeight: 24,
@@ -388,8 +396,9 @@ const styles = StyleSheet.create({
   },
   startConversationButtonText: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
-    color: '#ffffff',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   conversationsContainer: {
     paddingHorizontal: 24,
@@ -445,23 +454,27 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   userRole: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginTop: 2,
   },
   timestamp: {
     fontSize: 12,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#94a3b8',
   },
   unreadTimestamp: {
-    color: '#10B981',
-    fontFamily: 'Inter-SemiBold',
+    color: '#14b8a6',
+    fontWeight: '400',
+    fontFamily: 'System',
   },
   conversationFooter: {
     flexDirection: 'row',
@@ -470,13 +483,15 @@ const styles = StyleSheet.create({
   },
   lastMessage: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     flex: 1,
     marginRight: 8,
   },
   unreadMessage: {
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   unreadBadge: {
@@ -493,7 +508,8 @@ const styles = StyleSheet.create({
   },
   unreadCount: {
     fontSize: 12,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   newMessageButton: {
