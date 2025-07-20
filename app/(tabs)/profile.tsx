@@ -364,19 +364,22 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 24,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
     marginBottom: 4,
   },
   userRole: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#ffffff',
     marginBottom: 8,
   },
   userEmail: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   profileSection: {
@@ -399,7 +402,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   editButton: {
@@ -409,8 +413,9 @@ const styles = StyleSheet.create({
   },
   editButtonText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   editActions: {
     flexDirection: 'row',
@@ -440,19 +445,22 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     fontSize: 12,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginBottom: 4,
     textTransform: 'uppercase',
   },
   fieldValue: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   fieldInput: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
     borderBottomWidth: 1,
     borderBottomColor: '#e2e8f0',
@@ -478,11 +486,13 @@ const styles = StyleSheet.create({
   },
   selectOptionText: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   selectedOptionText: {
-    color: '#ffffff',
+    color: '#14b8a6',
+    fontWeight: '400',
   },
   actionsSection: {
     backgroundColor: '#ffffff',
@@ -499,7 +509,8 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   signOutButton: {
@@ -510,7 +521,8 @@ const styles = StyleSheet.create({
   },
   signOutButtonText: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    color: '#EF4444',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#ef4444',
   },
 });

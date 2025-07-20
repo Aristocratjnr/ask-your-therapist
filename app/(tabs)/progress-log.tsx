@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, TextInput, Dimensions, useWindowDimensions, PixelRatio, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, TextInput, Dimensions, useWindowDimensions, PixelRatio, Platform, Image } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '@/lib/supabase';
@@ -99,28 +99,35 @@ export default function ProgressLogScreen() {
 
   return (
     <ScrollView style={[styles.container, { paddingBottom: screenWidth * 0.18 }]} showsVerticalScrollIndicator={false}>
-      <LinearGradient
-        colors={["#14b8a6", "#0f766e"]}
+      <View
         style={[styles.header, {
+          backgroundColor: '#f8fafc',
           padding: screenWidth * 0.08,
           paddingTop: screenWidth * 0.18,
-          borderBottomLeftRadius: screenWidth * 0.07,
-          borderBottomRightRadius: screenWidth * 0.07,
+          borderBottomLeftRadius: screenWidth * 0.012,
+          borderBottomRightRadius: screenWidth * 0.02,
         }]}
       >
+        {/* Profile Image */}
+        <View style={styles.profileImageContainer}>
+          <Image
+            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
+            style={styles.profileImage}
+          />
+        </View>
         <View style={styles.headerIconContainer}>
-          <MaterialIcons name="monitor-heart" size={scaleFont(28)} color="#ffffff" />
-          <MaterialIcons name="trending-up" size={scaleFont(24)} color="rgba(255, 255, 255, 0.8)" style={styles.trendIcon} />
+          <MaterialIcons name="monitor-heart" size={scaleFont(28)} color="#1f2937" />
+          <MaterialIcons name="trending-up" size={scaleFont(24)} color="rgba(31, 41, 55, 0.8)" style={styles.trendIcon} />
         </View>
         <Text style={[styles.headerTitle, { fontSize: scaleFont(28) }]}>Daily Progress Log</Text>
         <Text style={[styles.headerSubtitle, { fontSize: scaleFont(16) }]}>Track your healing journey</Text>
-      </LinearGradient>
+      </View>
 
       <View style={[styles.content, { padding: screenWidth * 0.055 }]}>
         {/* Date Selection Card */}
         <View style={[styles.card, { padding: screenWidth * 0.055, borderRadius: screenWidth * 0.045, marginBottom: screenWidth * 0.055 }]}>
           <View style={styles.cardHeader}>
-            <MaterialIcons name="calendar-today" size={scaleFont(24)} color="#14b8a6" />
+
             <Text style={[styles.cardTitle, { fontSize: scaleFont(20) }]}>Date</Text>
           </View>
           <TouchableOpacity style={[styles.dateButton, { padding: screenWidth * 0.04, borderRadius: screenWidth * 0.035 }]}>
@@ -299,13 +306,13 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontWeight: '400',
-    color: '#ffffff',
+    color: '#1f2937',
     marginBottom: 8,
     textAlign: 'center',
     fontFamily: 'System',
   },
   headerSubtitle: {
-    color: 'rgba(255, 255, 255, 0.9)',
+    color: '#6b7280',
     textAlign: 'center',
     fontWeight: '300',
     fontFamily: 'System',
@@ -458,5 +465,22 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     letterSpacing: 0.5,
     fontFamily: 'System',
+  },
+  profileImageContainer: {
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: '#14b8a6',
+    backgroundColor: '#e0f2f1',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
 });

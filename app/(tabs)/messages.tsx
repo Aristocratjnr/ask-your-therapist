@@ -124,13 +124,14 @@ export default function MessagesScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Enhanced Header with Gradient */}
-      <LinearGradient
-        colors={['#10B981', '#059669']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.header}
-      >
+      {/* Header with solid background */}
+      <View style={styles.headerSolid}>
+        <View style={styles.profileImageContainer}>
+          <Image
+            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
+            style={styles.profileImage}
+          />
+        </View>
         <View style={styles.headerContent}>
           <Text style={styles.title}>Messages</Text>
           <Text style={styles.subtitle}>
@@ -140,7 +141,7 @@ export default function MessagesScreen() {
             }
           </Text>
         </View>
-      </LinearGradient>
+      </View>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
@@ -531,5 +532,30 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  headerSolid: {
+    paddingTop: 60,
+    paddingBottom: 24,
+    paddingHorizontal: 24,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    backgroundColor: '#f8fafc',
+  },
+  profileImageContainer: {
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: '#14b8a6',
+    backgroundColor: '#e0f2f1',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 3,
   },
 });
