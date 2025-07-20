@@ -61,6 +61,7 @@ export default function MessagesScreen() {
     createConversation 
   } = useMessaging();
   const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (userProfile) {
@@ -183,6 +184,8 @@ export default function MessagesScreen() {
             style={[styles.searchInput, { fontSize: scaleFont(16) }]}
             placeholder="Search conversations..."
             placeholderTextColor="#94a3b8"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
           />
         </View>
       </View>
@@ -235,98 +238,103 @@ export default function MessagesScreen() {
           </View>
         ) : (
           <View style={[styles.conversationsContainer, { paddingHorizontal: screenWidth * 0.06 }]}>
-            {conversations.map((conversation) => {
-              const otherUser = getOtherUser(conversation);
-              const lastMessageTime = conversation.last_message 
-                ? formatTime(conversation.last_message.created_at)
-                : formatTime(conversation.last_message_at);
-              
-              const isUnread = conversation.unread_count > 0;
+            {conversations
+              .filter(conversation => {
+                const otherUser = getOtherUser(conversation);
+                return otherUser?.name?.toLowerCase().includes(searchQuery.toLowerCase());
+              })
+              .map((conversation) => {
+                const otherUser = getOtherUser(conversation);
+                const lastMessageTime = conversation.last_message 
+                  ? formatTime(conversation.last_message.created_at)
+                  : formatTime(conversation.last_message_at);
+                
+                const isUnread = conversation.unread_count > 0;
 
-              return (
-                <TouchableOpacity
-                  key={conversation.id}
-                  style={[
-                    styles.conversationCard,
-                    isUnread && styles.unreadConversationCard,
-                    { padding: screenWidth * 0.04, marginBottom: screenWidth * 0.03 }
-                  ]}
-                  onPress={() => handleOpenConversation(conversation)}
-                  activeOpacity={0.95}
-                >
-                  {otherUser?.photo_url ? (
-                    <Image 
-                      source={{ uri: otherUser.photo_url }} 
-                      style={[styles.avatarImage, {
-                        width: screenWidth * 0.15,
-                        height: screenWidth * 0.15,
-                        borderRadius: screenWidth * 0.075
-                      }]} 
-                    />
-                  ) : (
-                    <Image
-                      source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
-                      style={[styles.avatarImage, {
-                        width: screenWidth * 0.15,
-                        height: screenWidth * 0.15,
-                        borderRadius: screenWidth * 0.075
-                      }]}
-                    />
-                  )}
+                return (
+                  <TouchableOpacity
+                    key={conversation.id}
+                    style={[
+                      styles.conversationCard,
+                      isUnread && styles.unreadConversationCard,
+                      { padding: screenWidth * 0.04, marginBottom: screenWidth * 0.03 }
+                    ]}
+                    onPress={() => handleOpenConversation(conversation)}
+                    activeOpacity={0.95}
+                  >
+                    {otherUser?.photo_url ? (
+                      <Image 
+                        source={{ uri: otherUser.photo_url }} 
+                        style={[styles.avatarImage, {
+                          width: screenWidth * 0.15,
+                          height: screenWidth * 0.15,
+                          borderRadius: screenWidth * 0.075
+                        }]} 
+                      />
+                    ) : (
+                      <Image
+                        source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+                        style={[styles.avatarImage, {
+                          width: screenWidth * 0.15,
+                          height: screenWidth * 0.15,
+                          borderRadius: screenWidth * 0.075
+                        }]}
+                      />
+                    )}
 
-                  <View style={[styles.conversationContent, { marginLeft: screenWidth * 0.04 }]}>
-                    <View style={styles.conversationHeader}>
-                      <View>
-                        <Text style={[styles.userName, { fontSize: scaleFont(16) }]}>
-                          {otherUser?.name || 'User'}
-                        </Text>
-                        <Text style={[styles.userRole, { fontSize: scaleFont(12) }]}>
-                          {otherUser?.role === 'therapist' ? 'Therapist' : 'Client'}
+                    <View style={[styles.conversationContent, { marginLeft: screenWidth * 0.04 }]}>
+                      <View style={styles.conversationHeader}>
+                        <View>
+                          <Text style={[styles.userName, { fontSize: scaleFont(16) }]}>
+                            {otherUser?.name || 'User'}
+                          </Text>
+                          <Text style={[styles.userRole, { fontSize: scaleFont(12) }]}>
+                            {otherUser?.role === 'therapist' ? 'Therapist' : 'Client'}
+                          </Text>
+                        </View>
+                        <Text style={[
+                          styles.timestamp,
+                          isUnread && styles.unreadTimestamp,
+                          { fontSize: scaleFont(12) }
+                        ]}>
+                          {lastMessageTime}
                         </Text>
                       </View>
-                      <Text style={[
-                        styles.timestamp,
-                        isUnread && styles.unreadTimestamp,
-                        { fontSize: scaleFont(12) }
-                      ]}>
-                        {lastMessageTime}
-                      </Text>
+
+                      <View style={styles.conversationFooter}>
+                        <Text 
+                          style={[
+                            styles.lastMessage,
+                            isUnread && styles.unreadMessage,
+                            { fontSize: scaleFont(14) }
+                          ]}
+                          numberOfLines={1}
+                        >
+                          {conversation.last_message?.message || 'No messages yet'}
+                        </Text>
+                        
+                        <MaterialIcons 
+                          name="chevron-right" 
+                          size={scaleFont(20)} 
+                          color="#cbd5e1" 
+                        />
+                      </View>
                     </View>
 
-                    <View style={styles.conversationFooter}>
-                      <Text 
-                        style={[
-                          styles.lastMessage,
-                          isUnread && styles.unreadMessage,
-                          { fontSize: scaleFont(14) }
-                        ]}
-                        numberOfLines={1}
-                      >
-                        {conversation.last_message?.message || 'No messages yet'}
-                      </Text>
-                      
-                      <MaterialIcons 
-                        name="chevron-right" 
-                        size={scaleFont(20)} 
-                        color="#cbd5e1" 
-                      />
-                    </View>
-                  </View>
-
-                  {isUnread && (
-                    <View style={[styles.unreadBadge, {
-                      width: screenWidth * 0.06,
-                      height: screenWidth * 0.06,
-                      borderRadius: screenWidth * 0.03
-                    }]}>
-                      <Text style={[styles.unreadCount, { fontSize: scaleFont(12) }]}>
-                        {conversation.unread_count}
-                      </Text>
-                    </View>
-                  )}
-                </TouchableOpacity>
-              );
-            })}
+                    {isUnread && (
+                      <View style={[styles.unreadBadge, {
+                        width: screenWidth * 0.06,
+                        height: screenWidth * 0.06,
+                        borderRadius: screenWidth * 0.03
+                      }]}>
+                        <Text style={[styles.unreadCount, { fontSize: scaleFont(12) }]}>
+                          {conversation.unread_count}
+                        </Text>
+                      </View>
+                    )}
+                  </TouchableOpacity>
+                );
+              })}
           </View>
         )}
       </ScrollView>
