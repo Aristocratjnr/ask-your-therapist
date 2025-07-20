@@ -108,13 +108,6 @@ export default function ProgressLogScreen() {
           borderBottomRightRadius: screenWidth * 0.02,
         }]}
       >
-        {/* Profile Image */}
-        <View style={styles.profileImageContainer}>
-          <Image
-            source={{ uri: 'https://randomuser.me/api/portraits/men/32.jpg' }}
-            style={styles.profileImage}
-          />
-        </View>
         <View style={styles.headerIconContainer}>
           <MaterialIcons name="monitor-heart" size={scaleFont(28)} color="#1f2937" />
           <MaterialIcons name="trending-up" size={scaleFont(24)} color="rgba(31, 41, 55, 0.8)" style={styles.trendIcon} />
@@ -465,22 +458,5 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     letterSpacing: 0.5,
     fontFamily: 'System',
-  },
-  profileImageContainer: {
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    borderWidth: 2,
-    borderColor: '#14b8a6',
-    backgroundColor: '#e0f2f1',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 3,
   },
 });

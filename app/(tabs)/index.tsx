@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Animated } from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Animated, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@/contexts/AuthContext';
 import { useVideoCall } from '@/contexts/VideoCallContext';
@@ -196,6 +196,12 @@ export default function HomeScreen() {
     }).start();
   };
 
+  const randomAvatarUrl = useMemo(() => {
+    const gender = Math.random() > 0.5 ? 'men' : 'women';
+    const num = Math.floor(Math.random() * 60);
+    return `https://randomuser.me/api/portraits/${gender}/${num}.jpg`;
+  }, []);
+
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <ScrollView
@@ -218,10 +224,31 @@ export default function HomeScreen() {
           end={{ x: 1, y: 0 }}
           style={[styles.headerContainer, { paddingHorizontal: horizontalPadding }]}
         >
-          <View style={styles.headerContent}>
-            <Text style={[styles.greeting, { fontSize: 16 * fontScale }]}> {getGreeting()}, </Text>
-            <Text style={[styles.name, { fontSize: 24 * fontScale }]}> {userProfile?.name || 'User'} </Text>
-            <Text style={[styles.subtitle, { fontSize: 14 * fontScale }]}> {isTherapist ? 'Ready to help your clients today?' : 'How are you feeling today?'} </Text>
+          <View style={[styles.headerContent, { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }]}> 
+            <View>
+              <Text style={[styles.greeting, { fontSize: 16 * fontScale }]}> {getGreeting()}, </Text>
+              <Text style={[styles.name, { fontSize: 24 * fontScale }]}> {userProfile?.name || 'User'} </Text>
+              <Text style={[styles.subtitle, { fontSize: 14 * fontScale }]}> {isTherapist ? 'Ready to help your clients today?' : 'How are you feeling today?'} </Text>
+            </View>
+            <View style={{ marginLeft: 16 }}>
+              <View style={{
+                width: 48,
+                height: 48,
+                borderRadius: 24,
+                overflow: 'hidden',
+                borderWidth: 2,
+                borderColor: '#fff',
+                backgroundColor: '#e5e7eb',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+                <Image
+                  source={{ uri: randomAvatarUrl }}
+                  style={{ width: 52, height: 52, borderRadius: 28 }}
+                  resizeMode="cover"
+                />
+              </View>
+            </View>
           </View>
         </LinearGradient>
 
@@ -352,7 +379,7 @@ export default function HomeScreen() {
                 }}
               >
                 <TouchableOpacity
-                  style={[styles.quickActionCard, { backgroundColor: action.bgColor }]}
+                  style={[styles.quickActionCard, { backgroundColor: action.bgColor, alignItems: 'center', justifyContent: 'center' }]}
                   onPress={action.onPress}
                   onPressIn={() => handleQuickActionPressIn(action.key)}
                   onPressOut={() => handleQuickActionPressOut(action.key)}
@@ -361,8 +388,8 @@ export default function HomeScreen() {
                   <View style={[styles.quickActionIconCircle, { backgroundColor: action.color }]}> 
                     <MaterialIcons name={action.icon as any} size={22 * fontScale} color="#fff" />
                   </View>
-                  <Text style={[styles.quickActionTitle, { fontSize: 15 * fontScale }]}> {action.title} </Text>
-                  <Text style={[styles.quickActionDesc, { fontSize: 13 * fontScale }]}> {action.desc} </Text>
+                  <Text style={[styles.quickActionTitle, { fontSize: 15 * fontScale, marginTop: 4 }]}> {action.title} </Text>
+                  <Text style={[styles.quickActionDesc, { fontSize: 13 * fontScale, marginTop: 2 }]}> {action.desc} </Text>
                 </TouchableOpacity>
               </Animated.View>
             ))}

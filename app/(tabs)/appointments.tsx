@@ -243,8 +243,9 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    color: '#64748b',
+    fontWeight: '300',
+    fontFamily: 'System',
+    color: '#64748B',
     marginBottom: 20,
   },
   retryButton: {
@@ -255,7 +256,8 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   header: {
@@ -279,8 +281,9 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
-    color: '#1e293b',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#1E293B',
   },
   headerButton: {
     width: 40,
@@ -551,13 +554,15 @@ const styles = StyleSheet.create({
   },
   appointmentDateText: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
-    color: '#1e293b',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#1E293B',
   },
   appointmentTimeText: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#64748b',
+    fontWeight: '300',
+    fontFamily: 'System',
+    color: '#64748B',
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -566,7 +571,8 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 12,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
     textTransform: 'capitalize',
   },
@@ -580,8 +586,9 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
-    color: '#1e293b',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#1E293B',
   },
   appointmentDetails: {
     gap: 8,
@@ -593,8 +600,9 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#64748b',
+    fontWeight: '300',
+    fontFamily: 'System',
+    color: '#64748B',
   },
   notesContainer: {
     backgroundColor: '#f8fafc',
@@ -603,7 +611,8 @@ const styles = StyleSheet.create({
   },
   notesText: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#475569',
     lineHeight: 20,
   },
@@ -622,7 +631,8 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#10B981',
   },
   emptyState: {
@@ -633,15 +643,17 @@ const styles = StyleSheet.create({
   },
   emptyStateTitle: {
     fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
-    color: '#1e293b',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#1E293B',
     marginTop: 16,
     marginBottom: 8,
   },
   emptyStateText: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
-    color: '#64748b',
+    fontWeight: '300',
+    fontFamily: 'System',
+    color: '#64748B',
     textAlign: 'center',
     lineHeight: 20,
     marginBottom: 24,
@@ -654,7 +666,8 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
 });
