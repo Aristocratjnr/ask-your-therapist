@@ -35,8 +35,14 @@ export default function HomeScreen() {
   const horizontalPadding = Math.max(16, Math.round(screenWidth * 0.05));
   const statCardMinWidth = Math.min(160, Math.max(120, Math.round(screenWidth * 0.28)));
   const fontScale = screenWidth < 350 ? 0.92 : screenWidth > 500 ? 1.08 : 1;
-  const quickActionCardWidth = screenWidth < 400 ? '100%' : '48%';
-  const quickActionCardMargin = screenWidth < 400 ? 0 : '1%';
+  // Responsive quick action columns
+  let quickActionColumns = 2;
+  if (screenWidth < 400) quickActionColumns = 1;
+  else if (screenWidth > 700) quickActionColumns = 4;
+  else if (screenWidth > 500) quickActionColumns = 3;
+  const quickActionCardWidth = `${Math.floor(100 / quickActionColumns) - 3}%`;
+  const quickActionCardMargin = 6;
+  const quickActionIconSize = screenWidth < 350 ? 18 : screenWidth > 500 ? 28 : 22;
 
   useEffect(() => {
     loadDashboardData();
@@ -374,8 +380,10 @@ export default function HomeScreen() {
                 key={action.key}
                 style={{
                   transform: [{ scale: getQuickActionScale(action.key) }],
-                  width: quickActionCardWidth,
+                  width: quickActionCardWidth as any, // allow percentage string for width
+                  minWidth: 140,
                   marginBottom: 16,
+                  marginRight: quickActionCardMargin,
                 }}
               >
                 <TouchableOpacity
@@ -385,11 +393,11 @@ export default function HomeScreen() {
                   onPressOut={() => handleQuickActionPressOut(action.key)}
                   activeOpacity={0.9}
                 >
-                  <View style={[styles.quickActionIconCircle, { backgroundColor: action.color }]}> 
-                    <MaterialIcons name={action.icon as any} size={22 * fontScale} color="#fff" />
+                  <View style={[styles.quickActionIconCircle, { backgroundColor: action.color, width: quickActionIconSize * 2.2, height: quickActionIconSize * 2.2, borderRadius: quickActionIconSize * 1.1 }]}> 
+                    <MaterialIcons name={action.icon as any} size={quickActionIconSize} color="#fff" />
                   </View>
-                  <Text style={[styles.quickActionTitle, { fontSize: 15 * fontScale, marginTop: 4 }]}> {action.title} </Text>
-                  <Text style={[styles.quickActionDesc, { fontSize: 13 * fontScale, marginTop: 2 }]}> {action.desc} </Text>
+                  <Text style={[styles.quickActionTitle, { fontSize: 15 * fontScale, marginTop: 4, textAlign: 'center' }]}> {action.title} </Text>
+                  <Text style={[styles.quickActionDesc, { fontSize: 13 * fontScale, marginTop: 2, textAlign: 'center' }]}> {action.desc} </Text>
                 </TouchableOpacity>
               </Animated.View>
             ))}
