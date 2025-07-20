@@ -145,8 +145,9 @@ export default function AppointmentsScreen() {
 
   return (
     <View style={[styles.container, { paddingHorizontal: width * 0.04 }]}> {/* Responsive horizontal padding */}
-      <View style={[styles.header, { paddingHorizontal: width * 0.04, paddingTop: width * 0.05, paddingBottom: width * 0.05 }]}> {/* Responsive header */}
-        <Text style={[styles.headerTitle, { fontSize: Math.max(16, width * 0.045) }]}>My Appointments</Text>
+      <View style={{ height: width * 0.10 }} /> {/* Add vertical space at the top */}
+      <View style={[styles.header, { paddingHorizontal: width * 0.04, paddingTop: width * 0.03, paddingBottom: width * 0.03, backgroundColor: 'transparent', borderBottomWidth: 0, justifyContent: 'center', alignItems: 'center' }]}> 
+        <Text style={[styles.headerTitle, { fontSize: Math.max(16, width * 0.045), textAlign: 'center' }]}>My Appointments</Text>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: width * 0.1 }}>
