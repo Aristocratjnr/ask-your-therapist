@@ -49,6 +49,7 @@ export default function BookingScreen() {
   const [booking, setBooking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { width: screenWidth } = useWindowDimensions();
+  const [imageError, setImageError] = useState(false);
 
   const timeSlots: TimeSlot[] = [
     { time: '09:00', available: true },
@@ -278,13 +279,15 @@ export default function BookingScreen() {
         {/* Therapist Card */}
         <View style={[styles.therapistCard, { marginHorizontal: screenWidth * 0.04 }]}> 
           <View style={styles.therapistInfo}>
-            {therapist.users?.photo_url ? (
-              <Image source={{ uri: therapist.users.photo_url }} style={styles.therapistImage} />
-            ) : (
-              <View style={styles.therapistImagePlaceholder}>
-                <MaterialIcons name="person" size={28} color="#64748b" />
-              </View>
-            )}
+            <Image
+              source={
+                imageError || !therapist.users?.photo_url
+                  ? require('../../assets/images/ot.png')
+                  : { uri: therapist.users.photo_url }
+              }
+              style={styles.therapistImage}
+              onError={() => setImageError(true)}
+            />
             <View style={styles.therapistDetails}>
               <Text style={[styles.therapistName, { fontSize: scaleFont(18) }]}> {therapist.users?.name || 'Licensed Therapist'} </Text>
               <Text style={[styles.therapistCredentials, { fontSize: scaleFont(14) }]}>{therapist.credentials}</Text>
@@ -459,28 +462,24 @@ export default function BookingScreen() {
       {/* Book Button */}
       <View style={styles.bottomContainer}>
         <TouchableOpacity
-          style={[styles.bookButton, (!selectedTime || booking) && styles.disabledButton]}
+          style={[
+            styles.bookButtonFlat,
+            (!selectedTime || booking) && styles.disabledButton
+          ]}
           onPress={handleBookAppointment}
           disabled={!selectedTime || booking}
           activeOpacity={0.9}
           accessibilityLabel="Confirm booking"
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
-          <LinearGradient
-            colors={['#14b8a6', '#059669']}
-            style={styles.bookButtonGradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            {booking ? (
-              <ActivityIndicator color="#ffffff" />
-            ) : (
-              <>
-                <MaterialIcons name="check-circle" size={20} color="#ffffff" />
-                <Text style={[styles.bookButtonText, { fontSize: scaleFont(16) }]}>Confirm Booking</Text>
-              </>
-            )}
-          </LinearGradient>
+          {booking ? (
+            <ActivityIndicator color="#14b8a6" />
+          ) : (
+            <>
+              <MaterialIcons name="check-circle" size={20} color="#14b8a6" />
+              <Text style={styles.bookButtonFlatText}>Confirm Booking</Text>
+            </>
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -911,5 +910,28 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontFamily: 'System',
     color: '#ffffff',
+  },
+  // Add new styles for the flat button to match search.tsx
+  bookButtonFlat: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderColor: '#14b8a6',
+    borderWidth: 1.5,
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 0,
+    marginBottom: 0,
+    marginHorizontal: 0,
+    gap: 10,
+  },
+  bookButtonFlatText: {
+    fontSize: 16,
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
+    marginLeft: 8,
   },
 });

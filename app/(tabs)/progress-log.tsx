@@ -109,7 +109,7 @@ export default function ProgressLogScreen() {
         }]}
       >
         <View style={styles.headerIconContainer}>
-          <MaterialIcons name="monitor-heart" size={scaleFont(28)} color="#1f2937" />
+         
           <MaterialIcons name="trending-up" size={scaleFont(24)} color="rgba(31, 41, 55, 0.8)" style={styles.trendIcon} />
         </View>
         <Text style={[styles.headerTitle, { fontSize: scaleFont(28) }]}>Daily Progress Log</Text>

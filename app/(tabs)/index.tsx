@@ -238,19 +238,24 @@ export default function HomeScreen() {
             </View>
             <View style={{ marginLeft: 16 }}>
               <View style={{
-                width: 48,
-                height: 48,
-                borderRadius: 24,
+                width: 72,
+                height: 72,
+                borderRadius: 36,
                 overflow: 'hidden',
-                borderWidth: 2,
+                borderWidth: 3,
                 borderColor: '#fff',
                 backgroundColor: '#e5e7eb',
                 justifyContent: 'center',
                 alignItems: 'center',
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.15,
+                shadowRadius: 6,
+                elevation: 4,
               }}>
                 <Image
                   source={{ uri: randomAvatarUrl }}
-                  style={{ width: 52, height: 52, borderRadius: 28 }}
+                  style={{ width: 80, height: 80, borderRadius: 40 }}
                   resizeMode="cover"
                 />
               </View>
