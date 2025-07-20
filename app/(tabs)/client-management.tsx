@@ -1,10 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
-import { Users, TrendingUp, Calendar, MessageCircle, FileText } from 'lucide-react-native';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  ScrollView, 
+  TouchableOpacity, 
+  Alert,
+  Image,
+  Dimensions,
+  useWindowDimensions,
+  PixelRatio
+} from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { router } from 'expo-router';
 import { useMessaging } from '@/contexts/MessagingContext';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const scaleFont = (size: number) => {
+  const scale = SCREEN_WIDTH / 375;
+  const newSize = size * scale;
+  return Math.round(PixelRatio.roundToNearestPixel(newSize));
+};
 
 interface RecentProgress {
   pain_level: number;
@@ -23,6 +42,7 @@ interface Client {
 }
 
 export default function ClientManagementScreen() {
+  const { width: screenWidth } = useWindowDimensions();
   const { userProfile } = useAuth();
   const { createConversation } = useMessaging();
   const [clients, setClients] = useState<Client[]>([]);
@@ -48,8 +68,8 @@ export default function ClientManagementScreen() {
 
       if (error) throw error;
 
-      // Get unique clients
-      const uniqueClients: Client[] = (appointments || []).reduce((acc: Client[], appointment: any) => {
+      // Get unique clients with random user images
+      const uniqueClients: Client[] = (appointments || []).reduce((acc: Client[], appointment: any, index: number) => {
         const clientId = appointment.client_id;
         const client = appointment.client;
         
@@ -59,7 +79,7 @@ export default function ClientManagementScreen() {
             name: client.name,
             email: client.email,
             phone: client.phone,
-            photo_url: client.photo_url,
+            photo_url: `https://randomuser.me/api/portraits/${index % 2 === 0 ? 'men' : 'women'}/${index % 100}.jpg`,
             condition: client.condition,
           });
         }
@@ -92,14 +112,6 @@ export default function ClientManagementScreen() {
     }
   };
 
-  const viewClientProgress = (clientId: string) => {
-    router.push(`/client-progress/${clientId}` as any);
-  };
-
-  const viewClientProfile = (clientId: string) => {
-    router.push(`/client-profile/${clientId}` as any);
-  };
-
   const handleStartConversation = async (clientId: string) => {
     try {
       const conversationId = await createConversation(clientId);
@@ -125,90 +137,163 @@ export default function ClientManagementScreen() {
   }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
-      <View style={styles.header}>
-        <Users size={32} color="#10B981" style={{ marginBottom: 12 }} />
-        <Text style={styles.headerTitle}>Client Management</Text>
-        <Text style={styles.headerSubtitle}>Monitor your clients' progress</Text>
-      </View>
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={styles.scrollContent}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
+      <LinearGradient
+        colors={['#f8fafc', '#f1f5f9']}
+        style={[styles.header, { paddingTop: screenWidth * 0.15 }]}
+      >
+        <View style={styles.headerContent}>
+          <MaterialIcons 
+            name="group" 
+            size={scaleFont(32)} 
+            color="#14b8a6" 
+            style={{ marginBottom: screenWidth * 0.03 }}
+          />
+          <Text style={[styles.headerTitle, { fontSize: scaleFont(24) }]}>Client Management</Text>
+          <Text style={[styles.headerSubtitle, { fontSize: scaleFont(14) }]}>Monitor your clients' progress</Text>
+        </View>
+      </LinearGradient>
 
-      <View style={styles.contentWithMargin}>
-        <Text style={styles.sectionTitle}>Active Clients ({clients.length})</Text>
+      {/* Content */}
+      <View style={[styles.contentWithMargin, { padding: screenWidth * 0.05 }]}>
+        <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
+          Active Clients ({clients.length})
+        </Text>
 
         {clients.map((client, idx) => (
           <View
             key={client.id}
-            style={[styles.clientCard, idx === 0 && styles.firstCard]}
+            style={[
+              styles.clientCard, 
+              idx === 0 && styles.firstCard,
+              { 
+                padding: screenWidth * 0.04,
+                marginBottom: screenWidth * 0.03,
+                borderRadius: screenWidth * 0.04
+              }
+            ]}
           >
+            {/* Client Header with Profile Image */}
             <View style={styles.clientHeader}>
-              <View style={styles.clientAvatar}>
-                <Text style={styles.clientInitials}>
-                  {client.name?.charAt(0) || 'C'}
-                </Text>
-              </View>
+              {client.photo_url ? (
+                <Image
+                  source={{ uri: client.photo_url }}
+                  style={[
+                    styles.clientAvatar, 
+                    { 
+                      width: screenWidth * 0.12,
+                      height: screenWidth * 0.12,
+                      borderRadius: screenWidth * 0.06
+                    }
+                  ]}
+                />
+              ) : (
+                <View style={[
+                  styles.clientAvatarPlaceholder,
+                  { 
+                    width: screenWidth * 0.12,
+                    height: screenWidth * 0.12,
+                    borderRadius: screenWidth * 0.06
+                  }
+                ]}>
+                  <Text style={[styles.clientInitials, { fontSize: scaleFont(18) }]}>
+                    {client.name?.charAt(0) || 'C'}
+                  </Text>
+                </View>
+              )}
               <View style={styles.clientInfo}>
-                <Text style={styles.clientName}>{client.name}</Text>
-                <Text style={styles.clientCondition}>{client.condition}</Text>
+                <Text style={[styles.clientName, { fontSize: scaleFont(16) }]}>{client.name}</Text>
+                <Text style={[styles.clientCondition, { fontSize: scaleFont(14) }]}>
+                  {client.condition || 'No condition specified'}
+                </Text>
               </View>
             </View>
 
+            {/* Progress Info */}
             {client.recentProgress && (
-              <View style={styles.progressInfo}>
+              <View style={[
+                styles.progressInfo,
+                { 
+                  paddingVertical: screenWidth * 0.02,
+                  marginVertical: screenWidth * 0.02
+                }
+              ]}>
                 <View style={styles.progressItem}>
-                  <Text style={styles.progressLabel}>Latest Pain Level</Text>
+                  <Text style={[styles.progressLabel, { fontSize: scaleFont(12) }]}>Latest Pain</Text>
                   <Text style={[
                     styles.progressValue,
-                    { color: client.recentProgress.pain_level > 6 ? '#ef4444' : '#10B981' }
+                    { 
+                      fontSize: scaleFont(16),
+                      color: client.recentProgress.pain_level > 6 ? '#ef4444' : '#14b8a6' 
+                    }
                   ]}>
                     {client.recentProgress.pain_level}/10
                   </Text>
                 </View>
                 <View style={styles.progressItem}>
-                  <Text style={styles.progressLabel}>Latest Mood</Text>
+                  <Text style={[styles.progressLabel, { fontSize: scaleFont(12) }]}>Latest Mood</Text>
                   <Text style={[
                     styles.progressValue,
-                    { color: client.recentProgress.mood_level < 5 ? '#ef4444' : '#10B981' }
+                    { 
+                      fontSize: scaleFont(16),
+                      color: client.recentProgress.mood_level < 5 ? '#ef4444' : '#14b8a6' 
+                    }
                   ]}>
                     {client.recentProgress.mood_level}/10
                   </Text>
                 </View>
                 <View style={styles.progressItem}>
-                  <Text style={styles.progressLabel}>Last Update</Text>
-                  <Text style={styles.progressDate}>
+                  <Text style={[styles.progressLabel, { fontSize: scaleFont(12) }]}>Last Update</Text>
+                  <Text style={[styles.progressDate, { fontSize: scaleFont(14) }]}>
                     {new Date(client.recentProgress.date).toLocaleDateString()}
                   </Text>
                 </View>
               </View>
             )}
 
-            <View style={styles.clientActionsRow}>
+            {/* Action Buttons */}
+            <View style={[
+              styles.clientActionsRow,
+              { 
+                paddingTop: screenWidth * 0.03,
+                marginTop: screenWidth * 0.02
+              }
+            ]}>
               <TouchableOpacity 
                 style={styles.actionButton}
                 onPress={() => router.push(`/client-profile/${client.id}`)}
               >
-                <FileText size={16} color="#10B981" />
-                <Text style={styles.actionText}>View Profile</Text>
+                <MaterialIcons name="person" size={scaleFont(18)} color="#14b8a6" />
+                <Text style={[styles.actionText, { fontSize: scaleFont(12) }]}>Profile</Text>
               </TouchableOpacity>
+              
               <TouchableOpacity 
                 style={styles.actionButton}
                 onPress={() => router.push(`/(tabs)/progress-charts?clientId=${client.id}`)}
               >
-                <TrendingUp size={16} color="#10B981" />
-                <Text style={styles.actionText}>View Progress</Text>
+                <MaterialIcons name="trending-up" size={scaleFont(18)} color="#14b8a6" />
+                <Text style={[styles.actionText, { fontSize: scaleFont(12) }]}>Progress</Text>
               </TouchableOpacity>
+              
               <TouchableOpacity 
                 style={styles.actionButton}
                 onPress={() => router.push(`/(tabs)/booking?clientId=${client.id}`)}
               >
-                <Calendar size={16} color="#10B981" />
-                <Text style={styles.actionText}>Schedule</Text>
+                <MaterialIcons name="calendar-today" size={scaleFont(18)} color="#14b8a6" />
+                <Text style={[styles.actionText, { fontSize: scaleFont(12) }]}>Schedule</Text>
               </TouchableOpacity>
+              
               <TouchableOpacity 
                 style={styles.actionButton}
                 onPress={() => handleStartConversation(client.id)}
               >
-                <MessageCircle size={16} color="#10B981" />
-                <Text style={styles.actionText}>Message</Text>
+                <MaterialIcons name="message" size={scaleFont(18)} color="#14b8a6" />
+                <Text style={[styles.actionText, { fontSize: scaleFont(12) }]}>Message</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -222,61 +307,48 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8fafc',
-    paddingBottom: 90, // Add padding for tab bar
   },
   scrollContent: {
-    paddingHorizontal: 0,
     paddingBottom: 90,
   },
   header: {
-    padding: 24,
     alignItems: 'center',
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
-    // Modernize header with rounded corners and padding
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
   },
+  headerContent: {
+    alignItems: 'center',
+    width: '100%',
+  },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: '400', // lighter
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#1f2937',
-    marginTop: 8,
+    marginBottom: 4,
   },
   headerSubtitle: {
-    fontSize: 14,
-    fontWeight: '300', // thin
+    fontWeight: '200',
     fontFamily: 'System',
-    color: '#6b7280',
-    marginTop: 4,
-  },
-  content: {
-    padding: 20,
+    color: '#64748b',
   },
   contentWithMargin: {
-    padding: 20,
     marginTop: 12,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '400', // lighter
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#1f2937',
     marginBottom: 16,
   },
   clientCard: {
     backgroundColor: '#ffffff',
-    borderRadius: 16, // match search card
-    padding: 16,
-    marginBottom: 12,
-    marginHorizontal: 24,
-    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
   },
   firstCard: {
     marginTop: 8,
@@ -287,17 +359,16 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   clientAvatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#10B981',
+    marginRight: 12,
+  },
+  clientAvatarPlaceholder: {
+    backgroundColor: '#14b8a6',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
   },
   clientInitials: {
-    fontSize: 18,
-    fontWeight: '400', // lighter
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#ffffff',
   },
@@ -305,14 +376,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   clientName: {
-    fontSize: 16,
-    fontWeight: '400', // lighter
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#1f2937',
   },
   clientCondition: {
-    fontSize: 14,
-    fontWeight: '300', // thin
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#6b7280',
     marginTop: 2,
@@ -320,50 +389,45 @@ const styles = StyleSheet.create({
   progressInfo: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 12,
-    paddingVertical: 8,
     borderTopWidth: 1,
     borderTopColor: '#f3f4f6',
+    borderBottomWidth: 1,
+    borderBottomColor: '#f3f4f6',
   },
   progressItem: {
     alignItems: 'center',
+    padding: 8,
   },
   progressLabel: {
-    fontSize: 12,
-    fontWeight: '300', // thin
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#6b7280',
     marginBottom: 4,
   },
   progressValue: {
-    fontSize: 16,
-    fontWeight: '400', // lighter
+    fontWeight: '300',
     fontFamily: 'System',
   },
   progressDate: {
-    fontSize: 12,
-    fontWeight: '300', // thin
+    fontWeight: '200',
     fontFamily: 'System',
     color: '#6b7280',
   },
-  clientActions: {
+  clientActionsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     borderTopWidth: 1,
     borderTopColor: '#f3f4f6',
-    paddingTop: 12,
   },
   actionButton: {
-    flexDirection: 'row',
     alignItems: 'center',
     padding: 8,
   },
   actionText: {
-    fontSize: 12,
-    fontWeight: '400', // lighter
+    fontWeight: '300',
     fontFamily: 'System',
-    color: '#10B981',
-    marginLeft: 4,
+    color: '#14b8a6',
+    marginTop: 4,
   },
   errorContainer: {
     flex: 1,
@@ -372,20 +436,9 @@ const styles = StyleSheet.create({
     padding: 24,
   },
   errorText: {
-    fontSize: 16,
-    fontWeight: '300', // thin
+    fontWeight: '300',
     fontFamily: 'System',
     color: '#6b7280',
     textAlign: 'center',
-  },
-  clientActionsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    borderTopColor: '#f3f4f6',
-    paddingTop: 12,
-    marginTop: 8,
-    gap: 4,
   },
 });
