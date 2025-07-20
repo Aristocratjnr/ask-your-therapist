@@ -125,21 +125,20 @@ export default function ClientManagementScreen() {
   }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
       <View style={styles.header}>
-        <Users size={32} color="#10B981" />
+        <Users size={32} color="#10B981" style={{ marginBottom: 12 }} />
         <Text style={styles.headerTitle}>Client Management</Text>
         <Text style={styles.headerSubtitle}>Monitor your clients' progress</Text>
       </View>
 
-      <View style={styles.content}>
+      <View style={styles.contentWithMargin}>
         <Text style={styles.sectionTitle}>Active Clients ({clients.length})</Text>
 
-        {clients.map((client) => (
-          <TouchableOpacity
+        {clients.map((client, idx) => (
+          <View
             key={client.id}
-            style={styles.clientCard}
-            onPress={() => viewClientProfile(client.id)}
+            style={[styles.clientCard, idx === 0 && styles.firstCard]}
           >
             <View style={styles.clientHeader}>
               <View style={styles.clientAvatar}>
@@ -182,7 +181,7 @@ export default function ClientManagementScreen() {
               </View>
             )}
 
-            <View style={styles.clientActions}>
+            <View style={styles.clientActionsRow}>
               <TouchableOpacity 
                 style={styles.actionButton}
                 onPress={() => router.push(`/client-profile/${client.id}`)}
@@ -212,7 +211,7 @@ export default function ClientManagementScreen() {
                 <Text style={styles.actionText}>Message</Text>
               </TouchableOpacity>
             </View>
-          </TouchableOpacity>
+          </View>
         ))}
       </View>
     </ScrollView>
@@ -225,43 +224,62 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8fafc',
     paddingBottom: 90, // Add padding for tab bar
   },
+  scrollContent: {
+    paddingHorizontal: 0,
+    paddingBottom: 90,
+  },
   header: {
     padding: 24,
     alignItems: 'center',
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
     borderBottomColor: '#e5e7eb',
+    // Modernize header with rounded corners and padding
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
   headerTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: '400', // lighter
+    fontFamily: 'System',
     color: '#1f2937',
     marginTop: 8,
   },
   headerSubtitle: {
     fontSize: 14,
+    fontWeight: '300', // thin
+    fontFamily: 'System',
     color: '#6b7280',
     marginTop: 4,
   },
   content: {
     padding: 20,
   },
+  contentWithMargin: {
+    padding: 20,
+    marginTop: 12,
+  },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '400', // lighter
+    fontFamily: 'System',
     color: '#1f2937',
     marginBottom: 16,
   },
   clientCard: {
     backgroundColor: '#ffffff',
-    borderRadius: 12,
+    borderRadius: 16, // match search card
     padding: 16,
     marginBottom: 12,
+    marginHorizontal: 24,
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
+  },
+  firstCard: {
+    marginTop: 8,
   },
   clientHeader: {
     flexDirection: 'row',
@@ -279,7 +297,8 @@ const styles = StyleSheet.create({
   },
   clientInitials: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: '400', // lighter
+    fontFamily: 'System',
     color: '#ffffff',
   },
   clientInfo: {
@@ -287,11 +306,14 @@ const styles = StyleSheet.create({
   },
   clientName: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '400', // lighter
+    fontFamily: 'System',
     color: '#1f2937',
   },
   clientCondition: {
     fontSize: 14,
+    fontWeight: '300', // thin
+    fontFamily: 'System',
     color: '#6b7280',
     marginTop: 2,
   },
@@ -308,15 +330,20 @@ const styles = StyleSheet.create({
   },
   progressLabel: {
     fontSize: 12,
+    fontWeight: '300', // thin
+    fontFamily: 'System',
     color: '#6b7280',
     marginBottom: 4,
   },
   progressValue: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '400', // lighter
+    fontFamily: 'System',
   },
   progressDate: {
     fontSize: 12,
+    fontWeight: '300', // thin
+    fontFamily: 'System',
     color: '#6b7280',
   },
   clientActions: {
@@ -333,9 +360,10 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: 12,
+    fontWeight: '400', // lighter
+    fontFamily: 'System',
     color: '#10B981',
     marginLeft: 4,
-    fontWeight: '500',
   },
   errorContainer: {
     flex: 1,
@@ -345,7 +373,19 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
+    fontWeight: '300', // thin
+    fontFamily: 'System',
     color: '#6b7280',
     textAlign: 'center',
+  },
+  clientActionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#f3f4f6',
+    paddingTop: 12,
+    marginTop: 8,
+    gap: 4,
   },
 });
