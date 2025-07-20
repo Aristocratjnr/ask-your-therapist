@@ -179,7 +179,7 @@ const SearchScreen = () => {
             )}
           </View>
           <TouchableOpacity style={styles.filterButton}>
-            <MaterialIcons name="filter-list" size={20} color="#ffffff" />
+            <MaterialIcons name="filter-list" size={20} color="#14b8a6" />
           </TouchableOpacity>
         </View>
       </View>
@@ -326,18 +326,11 @@ const SearchScreen = () => {
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
-                  style={styles.bookButton}
+                  style={[styles.bookButton, styles.bookButtonSolid]}
                   onPress={() => handleBookAppointment(therapist.id)}
                 >
-                  <LinearGradient
-                    colors={['#14b8a6', '#059669']}
-                    style={styles.bookButtonGradient}
-                    start={{ x: 0, y: 0 }}
-                    end={{ x: 1, y: 0 }}
-                  >
-                    <MaterialIcons name="schedule" size={16} color="#ffffff" />
-                    <Text style={styles.bookButtonText}>Book Session</Text>
-                  </LinearGradient>
+                  <MaterialIcons name="schedule" size={16} color="#14b8a6" />
+                  <Text style={styles.bookButtonText}>Book Session</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -418,9 +411,11 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
   },
   specialtyContainer: {
     paddingVertical: 16,
@@ -668,8 +663,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     fontFamily: 'System',
-    color: '#ffffff',
+    color: '#14b8a6',
     marginLeft: 8,
+  },
+  bookButtonSolid: {
+    backgroundColor: 'rgba(20,184,166,0.12)',
+    borderWidth: 1,
+    borderColor: '#14b8a6',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 14,
   },
   headerSolid: {
     paddingTop: 60,
