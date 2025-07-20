@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { router } from 'expo-router';
-import { ArrowLeft, Eye, EyeOff, User, Heart } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/lib/supabase';
 
@@ -90,7 +90,7 @@ export default function SignUpScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <ArrowLeft size={24} color="#ffffff" />
+        <MaterialIcons name="arrow-back" size={24} color="#ffffff" />
       </TouchableOpacity>
 
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
@@ -111,7 +111,7 @@ export default function SignUpScreen() {
                   ]}
                   onPress={() => setFormData({ ...formData, role: 'client' })}
                 >
-                  <User size={20} color={formData.role === 'client' ? '#ffffff' : '#64748b'} />
+                  <MaterialIcons name="person" size={22} color={formData.role === 'client' ? '#14b8a6' : '#64748b'} />
                   <Text style={[
                     styles.roleButtonText,
                     formData.role === 'client' && styles.selectedRoleButtonText
@@ -127,7 +127,7 @@ export default function SignUpScreen() {
                   ]}
                   onPress={() => setFormData({ ...formData, role: 'therapist' })}
                 >
-                  <Heart size={20} color={formData.role === 'therapist' ? '#ffffff' : '#64748b'} />
+                  <MaterialIcons name="favorite" size={22} color={formData.role === 'therapist' ? '#14b8a6' : '#64748b'} />
                   <Text style={[
                     styles.roleButtonText,
                     formData.role === 'therapist' && styles.selectedRoleButtonText
@@ -189,11 +189,7 @@ export default function SignUpScreen() {
                   style={styles.passwordToggle}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  {showPassword ? (
-                    <EyeOff size={20} color="#64748b" />
-                  ) : (
-                    <Eye size={20} color="#64748b" />
-                  )}
+                  <MaterialIcons name={showPassword ? "visibility-off" : "visibility"} size={22} color="#64748b" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -213,11 +209,7 @@ export default function SignUpScreen() {
                   style={styles.passwordToggle}
                   onPress={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  {showConfirmPassword ? (
-                    <EyeOff size={20} color="#64748b" />
-                  ) : (
-                    <Eye size={20} color="#64748b" />
-                  )}
+                  <MaterialIcons name={showConfirmPassword ? "visibility-off" : "visibility"} size={22} color="#64748b" />
                 </TouchableOpacity>
               </View>
             </View>
@@ -252,12 +244,17 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    backgroundColor: '#10B981',
+    backgroundColor: '#14b8a6',
     borderRadius: 50,
     top: 50,
     left: 24,
     zIndex: 1,
     padding: 8,
+    shadowColor: '#14b8a6',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
+    elevation: 4,
   },
   scrollView: {
     flex: 1,
@@ -272,25 +269,27 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     lineHeight: 24,
   },
   form: {
-    gap: 20,
+    gap: 24,
   },
   roleSelection: {
     gap: 12,
   },
   roleButtons: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 16,
   },
   roleButton: {
     flex: 1,
@@ -298,89 +297,110 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#ffffff',
-    borderRadius: 12,
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    borderWidth: 1,
+    borderRadius: 16,
+    paddingVertical: 18,
+    paddingHorizontal: 18,
+    borderWidth: 1.5,
     borderColor: '#e2e8f0',
     gap: 8,
+    shadowColor: 'transparent',
+    elevation: 0,
   },
   selectedRoleButton: {
-    backgroundColor: '#10B981',
-    borderColor: '#10B981',
+    backgroundColor: '#e0fdfa',
+    borderColor: '#14b8a6',
+    shadowColor: '#14b8a6',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.10,
+    shadowRadius: 8,
+    elevation: 3,
   },
   roleButtonText: {
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontSize: 15,
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   selectedRoleButtonText: {
-    color: '#ffffff',
+    color: '#14b8a6',
+    fontWeight: '400',
   },
   inputContainer: {
     gap: 8,
   },
   label: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   input: {
     backgroundColor: '#ffffff',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    borderRadius: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 18,
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
-    borderWidth: 1,
+    fontWeight: '300',
+    fontFamily: 'System',
+    borderWidth: 1.2,
     borderColor: '#e2e8f0',
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#ffffff',
-    borderRadius: 12,
-    borderWidth: 1,
+    borderRadius: 14,
+    borderWidth: 1.2,
     borderColor: '#e2e8f0',
   },
   passwordInput: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: 18,
+    paddingVertical: 18,
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
   },
   passwordToggle: {
     paddingHorizontal: 16,
   },
   signUpButton: {
-    backgroundColor: '#10B981',
-    borderRadius: 12,
-    paddingVertical: 16,
+    backgroundColor: '#14b8a6',
+    borderRadius: 16,
+    paddingVertical: 18,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 18,
+    shadowColor: '#14b8a6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    elevation: 6,
   },
   disabledButton: {
     opacity: 0.6,
   },
   signUpButtonText: {
-    fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontSize: 17,
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#ffffff',
+    letterSpacing: 0.1,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 24,
+    marginTop: 28,
   },
   footerText: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   footerLink: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
 });

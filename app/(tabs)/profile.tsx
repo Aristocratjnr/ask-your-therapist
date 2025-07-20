@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, TextInput, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, TextInput, Image, Dimensions, useWindowDimensions, PixelRatio, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { User, Settings, LogOut, CreditCard as Edit, Save, X, Heart, Stethoscope, MapPin, Phone, Mail } from 'lucide-react-native';
 import { useAuth } from '@/contexts/AuthContext';
 import { router } from 'expo-router';
 
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const scaleFont = (size: number) => {
+  const scale = SCREEN_WIDTH / 375;
+  const newSize = size * scale;
+  return Platform.OS === 'ios' ? Math.round(PixelRatio.roundToNearestPixel(newSize)) : Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2;
+};
+
 export default function ProfileScreen() {
+  const { width: screenWidth } = useWindowDimensions();
   const { userProfile, signOut, updateProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
@@ -80,49 +88,49 @@ export default function ProfileScreen() {
           colors={["#10B981", "#059669"]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
-          style={styles.headerBg}
+          style={[styles.headerBg, { paddingHorizontal: screenWidth * 0.06 }]}
         >
           <View style={styles.header}>
             <View style={styles.avatarContainer}>
               {userProfile?.photo_url ? (
                 <Image
                   source={{ uri: userProfile.photo_url }}
-                  style={styles.avatarImg}
+                  style={[styles.avatarImg, { width: screenWidth * 0.28, height: screenWidth * 0.28, borderRadius: (screenWidth * 0.28) / 2 }]}
                 />
               ) : (
                 <Image
                   source={{ uri: `https://randomuser.me/api/portraits/${userProfile?.name && userProfile.name.length % 2 === 0 ? 'men' : 'women'}/${(userProfile?.name?.charCodeAt(0) || 50) % 100}.jpg` }}
-                  style={styles.avatarImg}
+                  style={[styles.avatarImg, { width: screenWidth * 0.28, height: screenWidth * 0.28, borderRadius: (screenWidth * 0.28) / 2 }]}
                 />
               )}
-              <View style={styles.roleIndicator}>
+              <View style={[styles.roleIndicator, { width: screenWidth * 0.09, height: screenWidth * 0.09, borderRadius: (screenWidth * 0.09) / 2 }] }>
                 {isTherapist ? (
-                  <Stethoscope size={16} color="#ffffff" />
+                  <Stethoscope size={scaleFont(16)} color="#ffffff" />
                 ) : (
-                  <Heart size={16} color="#ffffff" />
+                  <Heart size={scaleFont(16)} color="#ffffff" />
                 )}
               </View>
             </View>
-            <Text style={styles.userName}>{userProfile?.name || 'User'}</Text>
-            <Text style={styles.userRole}>
+            <Text style={[styles.userName, { fontSize: scaleFont(24) }]}>{userProfile?.name || 'User'}</Text>
+            <Text style={[styles.userRole, { fontSize: scaleFont(16) }] }>
               {isTherapist ? 'Occupational Therapist' : 'Client'}
             </Text>
-            <Text style={styles.userEmail}>{userProfile?.email}</Text>
+            <Text style={[styles.userEmail, { fontSize: scaleFont(14) }]}>{userProfile?.email}</Text>
           </View>
         </LinearGradient>
 
         <View style={styles.divider} />
-        <View style={styles.profileSection}>
+        <View style={[styles.profileSection, { paddingHorizontal: screenWidth * 0.06 }] }>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Profile Information</Text>
+            <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>Profile Information</Text>
             {!isEditing ? (
               <TouchableOpacity
                 style={styles.editButton}
                 onPress={() => setIsEditing(true)}
                 activeOpacity={0.7}
               >
-                <Edit size={16} color="#10B981" />
-                <Text style={styles.editButtonText}>Edit</Text>
+                <Edit size={scaleFont(16)} color="#10B981" />
+                <Text style={[styles.editButtonText, { fontSize: scaleFont(14) }]}>Edit</Text>
               </TouchableOpacity>
             ) : (
               <View style={styles.editActions}>
@@ -140,14 +148,14 @@ export default function ProfileScreen() {
                   }}
                   activeOpacity={0.7}
                 >
-                  <X size={16} color="#64748b" />
+                  <X size={scaleFont(16)} color="#64748b" />
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.saveButton}
                   onPress={handleSaveProfile}
                   activeOpacity={0.7}
                 >
-                  <Save size={16} color="#ffffff" />
+                  <Save size={scaleFont(16)} color="#ffffff" />
                 </TouchableOpacity>
               </View>
             )}
@@ -156,7 +164,7 @@ export default function ProfileScreen() {
           <View style={styles.profileFields}>
             <View style={styles.field}>
               <View style={styles.fieldIcon}>
-                <User size={16} color="#64748b" />
+                <User size={scaleFont(16)} color="#64748b" />
               </View>
               <View style={styles.fieldContent}>
                 <Text style={styles.fieldLabel}>Full Name</Text>
@@ -175,7 +183,7 @@ export default function ProfileScreen() {
 
             <View style={styles.field}>
               <View style={styles.fieldIcon}>
-                <Mail size={16} color="#64748b" />
+                <Mail size={scaleFont(16)} color="#64748b" />
               </View>
               <View style={styles.fieldContent}>
                 <Text style={styles.fieldLabel}>Email</Text>
@@ -185,7 +193,7 @@ export default function ProfileScreen() {
 
             <View style={styles.field}>
               <View style={styles.fieldIcon}>
-                <Phone size={16} color="#64748b" />
+                <Phone size={scaleFont(16)} color="#64748b" />
               </View>
               <View style={styles.fieldContent}>
                 <Text style={styles.fieldLabel}>Phone Number</Text>
@@ -205,7 +213,7 @@ export default function ProfileScreen() {
 
             <View style={styles.field}>
               <View style={styles.fieldIcon}>
-                <MapPin size={16} color="#64748b" />
+                <MapPin size={scaleFont(16)} color="#64748b" />
               </View>
               <View style={styles.fieldContent}>
                 <Text style={styles.fieldLabel}>Location</Text>
@@ -225,7 +233,7 @@ export default function ProfileScreen() {
             {isTherapist ? (
               <View style={styles.field}>
                 <View style={styles.fieldIcon}>
-                  <Stethoscope size={16} color="#64748b" />
+                  <Stethoscope size={scaleFont(16)} color="#64748b" />
                 </View>
                 <View style={styles.fieldContent}>
                   <Text style={styles.fieldLabel}>Specialty</Text>
@@ -257,7 +265,7 @@ export default function ProfileScreen() {
             ) : (
               <View style={styles.field}>
                 <View style={styles.fieldIcon}>
-                  <Heart size={16} color="#64748b" />
+                  <Heart size={scaleFont(16)} color="#64748b" />
                 </View>
                 <View style={styles.fieldContent}>
                   <Text style={styles.fieldLabel}>Condition</Text>
@@ -291,15 +299,15 @@ export default function ProfileScreen() {
         </View>
 
         <View style={styles.divider} />
-        <View style={styles.actionsSection}>
+        <View style={[styles.actionsSection, { paddingHorizontal: screenWidth * 0.06 }] }>
           <TouchableOpacity style={styles.actionButton}>
-            <Settings size={20} color="#64748b" />
-            <Text style={styles.actionButtonText}>Settings</Text>
+            <Settings size={scaleFont(20)} color="#64748b" />
+            <Text style={[styles.actionButtonText, { fontSize: scaleFont(16) }]}>Settings</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut}>
-            <LogOut size={20} color="#EF4444" />
-            <Text style={styles.signOutButtonText}>Sign Out</Text>
+            <LogOut size={scaleFont(20)} color="#EF4444" />
+            <Text style={[styles.signOutButtonText, { fontSize: scaleFont(16) }]}>Sign Out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

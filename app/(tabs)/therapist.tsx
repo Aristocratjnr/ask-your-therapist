@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert, Linking } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, Star, MapPin, Calendar, Clock, Award, Phone, Mail, Video, MessageCircle, Heart } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -129,10 +129,10 @@ export default function TherapistProfileScreen() {
     return (
       <View style={styles.loadingContainer}>
         <LinearGradient
-          colors={['#10B981', '#059669']}
+          colors={['#14b8a6', '#059669']}
           style={styles.loadingGradient}
         >
-          <Heart size={32} color="#ffffff" />
+          <MaterialIcons name="favorite" size={32} color="#ffffff" />
         </LinearGradient>
         <Text style={styles.loadingText}>Loading profile...</Text>
       </View>
@@ -155,11 +155,11 @@ export default function TherapistProfileScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.headerButton} onPress={() => router.back()}>
-          <ArrowLeft size={24} color="#1e293b" />
+          <MaterialIcons name="arrow-back" size={24} color="#1e293b" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Therapist Profile</Text>
         <TouchableOpacity style={styles.headerButton} onPress={toggleFavorite}>
-          <Heart size={24} color={isFavorite ? "#ef4444" : "#64748b"} fill={isFavorite ? "#ef4444" : "none"} />
+          <MaterialIcons name="favorite" size={24} color={isFavorite ? "#ef4444" : "#64748b"} />
         </TouchableOpacity>
       </View>
 
@@ -171,7 +171,7 @@ export default function TherapistProfileScreen() {
               <Image source={{ uri: therapist.user_photo_url }} style={styles.avatar} />
             ) : (
               <LinearGradient
-                colors={['#10B981', '#059669']}
+                colors={['#14b8a6', '#059669']}
                 style={styles.avatar}
               >
                 <Text style={styles.avatarText}>
@@ -180,7 +180,7 @@ export default function TherapistProfileScreen() {
               </LinearGradient>
             )}
             <View style={styles.verifiedBadge}>
-              <Award size={14} color="#ffffff" />
+              <MaterialIcons name="verified" size={14} color="#ffffff" />
             </View>
           </View>
 
@@ -190,7 +190,7 @@ export default function TherapistProfileScreen() {
             
             <View style={styles.ratingSection}>
               <View style={styles.ratingContainer}>
-                <Star size={16} color="#f59e0b" fill="#f59e0b" />
+                <MaterialIcons name="star" size={16} color="#f59e0b" />
                 <Text style={styles.ratingText}>4.8</Text>
                 <Text style={styles.reviewCount}>(124 reviews)</Text>
               </View>
@@ -198,11 +198,11 @@ export default function TherapistProfileScreen() {
 
             <View style={styles.metaInfo}>
               <View style={styles.metaItem}>
-                <MapPin size={14} color="#64748b" />
+                <MaterialIcons name="location-on" size={14} color="#64748b" />
                 <Text style={styles.metaText}>{therapist.user_location || 'Remote'}</Text>
               </View>
               <View style={styles.metaItem}>
-                <Calendar size={14} color="#64748b" />
+                <MaterialIcons name="calendar-today" size={14} color="#64748b" />
                 <Text style={styles.metaText}>{therapist.experience_years} years experience</Text>
               </View>
             </View>
@@ -217,15 +217,15 @@ export default function TherapistProfileScreen() {
         {/* Quick Actions */}
         <View style={styles.quickActions}>
           <TouchableOpacity style={styles.actionButton} onPress={handleCallTherapist}>
-            <Phone size={20} color="#10B981" />
+            <MaterialIcons name="phone" size={20} color="#14b8a6" />
             <Text style={styles.actionButtonText}>Call</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton} onPress={handleSendMessage}>
-            <MessageCircle size={20} color="#10B981" />
+            <MaterialIcons name="chat" size={20} color="#14b8a6" />
             <Text style={styles.actionButtonText}>Message</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton} onPress={handleVideoCall}>
-            <Video size={20} color="#10B981" />
+            <MaterialIcons name="videocam" size={20} color="#14b8a6" />
             <Text style={styles.actionButtonText}>Video</Text>
           </TouchableOpacity>
         </View>
@@ -287,7 +287,7 @@ export default function TherapistProfileScreen() {
                 <Text style={styles.reviewerName}>Anonymous</Text>
                 <View style={styles.reviewRating}>
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <Star key={star} size={12} color="#f59e0b" fill="#f59e0b" />
+                    <MaterialIcons key={star} name="star" size={12} color="#f59e0b" />
                   ))}
                 </View>
               </View>
@@ -304,10 +304,10 @@ export default function TherapistProfileScreen() {
       <View style={styles.bottomActions}>
         <TouchableOpacity style={styles.bookButton} onPress={handleBookSession}>
           <LinearGradient
-            colors={['#10B981', '#059669']}
+            colors={['#14b8a6', '#059669']}
             style={styles.bookButtonGradient}
           >
-            <Clock size={20} color="#ffffff" />
+            <MaterialIcons name="schedule" size={20} color="#ffffff" />
             <Text style={styles.bookButtonText}>Book Session</Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -337,7 +337,8 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   errorContainer: {
@@ -349,7 +350,8 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 18,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginBottom: 24,
   },
@@ -361,7 +363,8 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   header: {
@@ -385,7 +388,8 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   content: {
@@ -417,7 +421,8 @@ const styles = StyleSheet.create({
   },
   avatarText: {
     fontSize: 36,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   verifiedBadge: {
@@ -438,13 +443,15 @@ const styles = StyleSheet.create({
   },
   therapistName: {
     fontSize: 24,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 4,
   },
   credentials: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginBottom: 12,
   },
@@ -458,12 +465,14 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   reviewCount: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   metaInfo: {
@@ -478,7 +487,8 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   priceSection: {
@@ -489,14 +499,16 @@ const styles = StyleSheet.create({
   },
   priceLabel: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginBottom: 4,
   },
   priceText: {
     fontSize: 28,
-    fontFamily: 'Inter-Bold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   quickActions: {
     flexDirection: 'row',
@@ -518,8 +530,9 @@ const styles = StyleSheet.create({
   },
   actionButtonText: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   section: {
     backgroundColor: '#ffffff',
@@ -534,13 +547,15 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 12,
   },
   bioText: {
     fontSize: 15,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     lineHeight: 22,
   },
@@ -559,7 +574,8 @@ const styles = StyleSheet.create({
   },
   specialtyText: {
     fontSize: 12,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#3b82f6',
   },
   availabilityContainer: {
@@ -578,12 +594,14 @@ const styles = StyleSheet.create({
   },
   availabilityText: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    color: '#10b981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   availabilitySubtext: {
     fontSize: 12,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginLeft: 18,
   },
@@ -595,8 +613,9 @@ const styles = StyleSheet.create({
   },
   seeAllText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   reviewCard: {
     borderTopWidth: 1,
@@ -619,7 +638,8 @@ const styles = StyleSheet.create({
   },
   reviewerInitial: {
     fontSize: 14,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   reviewerInfo: {
@@ -627,7 +647,8 @@ const styles = StyleSheet.create({
   },
   reviewerName: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 2,
   },
@@ -637,12 +658,14 @@ const styles = StyleSheet.create({
   },
   reviewDate: {
     fontSize: 12,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   reviewText: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     lineHeight: 20,
   },
@@ -665,7 +688,8 @@ const styles = StyleSheet.create({
   },
   bookButtonText: {
     fontSize: 16,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
 });

@@ -19,7 +19,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#1f2937',
+        tabBarActiveTintColor: '#14b8a6',
         tabBarInactiveTintColor: '#6b7280',
         tabBarStyle: {
           minHeight: 60 + insets.bottom,
@@ -30,6 +30,10 @@ export default function TabLayout() {
           shadowOpacity: 0.05,
           shadowRadius: 8,
           elevation: 5,
+          borderTopWidth: 1,
+          borderTopColor: '#e0e8f0',
+          borderTopLeftRadius: 18,
+          borderTopRightRadius: 18,
         },
         tabBarItemStyle: {
           backgroundColor: 'transparent',
@@ -37,8 +41,9 @@ export default function TabLayout() {
           minHeight: 44,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
+          fontSize: 13,
+          fontWeight: '300',
+          fontFamily: 'System',
           marginTop: 2,
         },
         tabBarIconStyle: {

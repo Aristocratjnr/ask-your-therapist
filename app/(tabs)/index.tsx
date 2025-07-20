@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, RefreshControl, Animated } from 'react-native';
-import { Calendar, MessageCircle, TrendingUp, Heart, Clock, Users, ArrowRight, FileText, Video } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '@/contexts/AuthContext';
 import { useVideoCall } from '@/contexts/VideoCallContext';
@@ -207,8 +206,8 @@ export default function HomeScreen() {
           <RefreshControl 
             refreshing={refreshing} 
             onRefresh={onRefresh} 
-            tintColor="#10B981"
-            colors={['#10B981']} 
+            tintColor="#14b8a6"
+            colors={['#14b8a6']} 
           />
         }
       >
@@ -220,80 +219,54 @@ export default function HomeScreen() {
           style={[styles.headerContainer, { paddingHorizontal: horizontalPadding }]}
         >
           <View style={styles.headerContent}>
-            <Text style={[styles.greeting, { fontSize: 16 * fontScale }]}>
-              {getGreeting()},
-            </Text>
-            <Text style={[styles.name, { fontSize: 24 * fontScale }]}>
-              {userProfile?.name || 'User'}
-            </Text>
-            <Text style={[styles.subtitle, { fontSize: 14 * fontScale }]}>
-              {isTherapist 
-                ? 'Ready to help your clients today?' 
-                : 'How are you feeling today?'}
-            </Text>
+            <Text style={[styles.greeting, { fontSize: 16 * fontScale }]}> {getGreeting()}, </Text>
+            <Text style={[styles.name, { fontSize: 24 * fontScale }]}> {userProfile?.name || 'User'} </Text>
+            <Text style={[styles.subtitle, { fontSize: 14 * fontScale }]}> {isTherapist ? 'Ready to help your clients today?' : 'How are you feeling today?'} </Text>
           </View>
         </LinearGradient>
 
         {/* Stats Grid */}
-        <View style={[styles.statsGridContainer, { paddingHorizontal: horizontalPadding }]}>
+        <View style={[styles.statsGridContainer, { paddingHorizontal: horizontalPadding }]}> 
           <View style={styles.statsGrid}>
-            <View style={[styles.statCard, { minWidth: statCardMinWidth }]}>
-              <View style={[styles.statIcon, { backgroundColor: '#D1FAE5' }]}>
-                <Calendar size={20} color="#10B981" />
+            <View style={[styles.statCard, { minWidth: statCardMinWidth }]}> 
+              <View style={[styles.statIcon, { backgroundColor: '#D1FAE5' }]}> 
+                <MaterialIcons name="calendar-today" size={20} color="#14b8a6" />
               </View>
-              <Text style={[styles.statNumber, { fontSize: 20 * fontScale }]}>
-                {stats.upcomingAppointments}
-              </Text>
-              <Text style={[styles.statLabel, { fontSize: 12 * fontScale }]}>
-                Upcoming Appointments
-              </Text>
+              <Text style={[styles.statNumber, { fontSize: 20 * fontScale }]}> {stats.upcomingAppointments} </Text>
+              <Text style={[styles.statLabel, { fontSize: 12 * fontScale }]}> Upcoming Appointments </Text>
             </View>
 
-            <View style={[styles.statCard, { minWidth: statCardMinWidth }]}>
-              <View style={[styles.statIcon, { backgroundColor: '#E0E7FF' }]}>
-                <MessageCircle size={20} color="#4F46E5" />
+            <View style={[styles.statCard, { minWidth: statCardMinWidth }]}> 
+              <View style={[styles.statIcon, { backgroundColor: '#E0E7FF' }]}> 
+                <MaterialIcons name="mail" size={20} color="#4F46E5" />
               </View>
-              <Text style={[styles.statNumber, { fontSize: 20 * fontScale }]}>
-                {stats.unreadMessages}
-              </Text>
-              <Text style={[styles.statLabel, { fontSize: 12 * fontScale }]}>
-                Unread Messages
-              </Text>
+              <Text style={[styles.statNumber, { fontSize: 20 * fontScale }]}> {stats.unreadMessages} </Text>
+              <Text style={[styles.statLabel, { fontSize: 12 * fontScale }]}> Unread Messages </Text>
             </View>
 
             {isTherapist ? (
-              <View style={[styles.statCard, { minWidth: statCardMinWidth }]}>
-                <View style={[styles.statIcon, { backgroundColor: '#FEE2E2' }]}>
-                  <Users size={20} color="#EF4444" />
+              <View style={[styles.statCard, { minWidth: statCardMinWidth }]}> 
+                <View style={[styles.statIcon, { backgroundColor: '#FEE2E2' }]}> 
+                  <MaterialIcons name="group" size={20} color="#EF4444" />
                 </View>
-                <Text style={[styles.statNumber, { fontSize: 20 * fontScale }]}>
-                  {stats.totalClients}
-                </Text>
-                <Text style={[styles.statLabel, { fontSize: 12 * fontScale }]}>
-                  Total Clients
-                </Text>
+                <Text style={[styles.statNumber, { fontSize: 20 * fontScale }]}> {stats.totalClients} </Text>
+                <Text style={[styles.statLabel, { fontSize: 12 * fontScale }]}> Total Clients </Text>
               </View>
             ) : (
-              <View style={[styles.statCard, { minWidth: statCardMinWidth }]}>
-                <View style={[styles.statIcon, { backgroundColor: '#DBEAFE' }]}>
-                  <TrendingUp size={20} color="#3B82F6" />
+              <View style={[styles.statCard, { minWidth: statCardMinWidth }]}> 
+                <View style={[styles.statIcon, { backgroundColor: '#DBEAFE' }]}> 
+                  <MaterialIcons name="show-chart" size={20} color="#3B82F6" />
                 </View>
-                <Text style={[styles.statNumber, { fontSize: 20 * fontScale }]}>
-                  {stats.progressEntries}
-                </Text>
-                <Text style={[styles.statLabel, { fontSize: 12 * fontScale }]}>
-                  Progress Entries
-                </Text>
+                <Text style={[styles.statNumber, { fontSize: 20 * fontScale }]}> {stats.progressEntries} </Text>
+                <Text style={[styles.statLabel, { fontSize: 12 * fontScale }]}> Progress Entries </Text>
               </View>
             )}
           </View>
         </View>
 
         {/* Quick Actions Section */}
-        <View style={[styles.sectionContainer, { paddingHorizontal: horizontalPadding }]}>
-          <Text style={[styles.sectionTitle, { fontSize: 18 * fontScale }]}>
-            Quick Actions
-          </Text>
+        <View style={[styles.sectionContainer, { paddingHorizontal: horizontalPadding }]}> 
+          <Text style={[styles.sectionTitle, { fontSize: 18 * fontScale }]}> Quick Actions </Text>
           <View style={styles.quickActionGrid}>
             {(isTherapist ? [
               {
@@ -301,7 +274,7 @@ export default function HomeScreen() {
                 title: 'Manage Schedule',
                 desc: 'Set your availability',
                 icon: 'calendar-today',
-                color: '#10B981',
+                color: '#14b8a6',
                 bgColor: '#D1FAE5',
                 onPress: () => handleQuickAction('schedule'),
               },
@@ -338,7 +311,7 @@ export default function HomeScreen() {
                 title: 'Find Therapist',
                 desc: 'Book a session',
                 icon: 'favorite',
-                color: '#10B981',
+                color: '#14b8a6',
                 bgColor: '#D1FAE5',
                 onPress: () => handleQuickAction('find-therapist'),
               },
@@ -355,7 +328,7 @@ export default function HomeScreen() {
                 key: 'log-progress',
                 title: 'Log Progress',
                 desc: 'Track your journey',
-                icon: 'trending-up',
+                icon: 'show-chart',
                 color: '#F59E0B',
                 bgColor: '#FEF3C7',
                 onPress: () => handleQuickAction('log-progress'),
@@ -385,15 +358,11 @@ export default function HomeScreen() {
                   onPressOut={() => handleQuickActionPressOut(action.key)}
                   activeOpacity={0.9}
                 >
-                  <View style={[styles.quickActionIconCircle, { backgroundColor: action.color }]}>
+                  <View style={[styles.quickActionIconCircle, { backgroundColor: action.color }]}> 
                     <MaterialIcons name={action.icon as any} size={22 * fontScale} color="#fff" />
                   </View>
-                  <Text style={[styles.quickActionTitle, { fontSize: 15 * fontScale }]}>
-                    {action.title}
-                  </Text>
-                  <Text style={[styles.quickActionDesc, { fontSize: 13 * fontScale }]}>
-                    {action.desc}
-                  </Text>
+                  <Text style={[styles.quickActionTitle, { fontSize: 15 * fontScale }]}> {action.title} </Text>
+                  <Text style={[styles.quickActionDesc, { fontSize: 13 * fontScale }]}> {action.desc} </Text>
                 </TouchableOpacity>
               </Animated.View>
             ))}
@@ -401,27 +370,19 @@ export default function HomeScreen() {
         </View>
 
         {/* Recent Activity Section */}
-        <View style={[styles.sectionContainer, { paddingHorizontal: horizontalPadding }]}>
-          <Text style={[styles.sectionTitle, { fontSize: 18 * fontScale }]}>
-            Recent Activity
-          </Text>
+        <View style={[styles.sectionContainer, { paddingHorizontal: horizontalPadding }]}> 
+          <Text style={[styles.sectionTitle, { fontSize: 18 * fontScale }]}> Recent Activity </Text>
           <View style={styles.activityCard}>
             <View style={styles.activityIcon}>
-              <Clock size={20} color="#64748B" />
+              <MaterialIcons name="schedule" size={20} color="#64748B" />
             </View>
-            <Text style={[styles.activityText, { fontSize: 14 * fontScale }]}>
-              {isTherapist
-                ? 'No recent client activity. Check back later.'
-                : 'Welcome to OTConekt! Start by finding a therapist that suits your needs.'}
-            </Text>
+            <Text style={[styles.activityText, { fontSize: 14 * fontScale }]}> {isTherapist ? 'No recent client activity. Check back later.' : 'Welcome to OTConekt! Start by finding a therapist that suits your needs.'} </Text>
           </View>
         </View>
 
         {/* Demo Video Call Section */}
-        <View style={[styles.sectionContainer, { paddingHorizontal: horizontalPadding }]}>
-          <Text style={[styles.sectionTitle, { fontSize: 18 * fontScale }]}>
-            Try Our Features
-          </Text>
+        <View style={[styles.sectionContainer, { paddingHorizontal: horizontalPadding }]}> 
+          <Text style={[styles.sectionTitle, { fontSize: 18 * fontScale }]}> Try Our Features </Text>
           <Animated.View style={{ transform: [{ scale: demoButtonScale }] }}>
             <TouchableOpacity
               style={styles.demoCard}
@@ -441,13 +402,11 @@ export default function HomeScreen() {
                 </View>
                 <View style={styles.demoContent}>
                   <View style={styles.demoIconCircle}>
-                    <Video size={28} color="#fff" />
+                    <MaterialIcons name="videocam" size={28} color="#fff" />
                   </View>
                   <View style={styles.demoTextContainer}>
                     <Text style={styles.demoCardTitle}>Test Video Call</Text>
-                    <Text style={styles.demoCardDesc}>
-                      Experience our secure, high-quality video calling feature
-                    </Text>
+                    <Text style={styles.demoCardDesc}> Experience our secure, high-quality video calling feature </Text>
                   </View>
                 </View>
               </LinearGradient>
@@ -478,17 +437,20 @@ const styles = StyleSheet.create({
     maxWidth: '100%',
   },
   greeting: {
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748B',
     marginBottom: 4,
   },
   name: {
-    fontFamily: 'Inter-Bold',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1E293B',
     marginBottom: 8,
   },
   subtitle: {
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748B',
     lineHeight: 20,
   },
@@ -523,12 +485,14 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   statNumber: {
-    fontFamily: 'Inter-Bold',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1E293B',
     marginBottom: 4,
   },
   statLabel: {
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748B',
     textAlign: 'center',
   },
@@ -536,7 +500,8 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   sectionTitle: {
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1E293B',
     marginBottom: 16,
   },
@@ -564,13 +529,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   quickActionTitle: {
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1E293B',
     marginBottom: 4,
     textAlign: 'center',
   },
   quickActionDesc: {
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748B',
     textAlign: 'center',
   },
@@ -590,7 +557,8 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   activityText: {
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748B',
     flex: 1,
     lineHeight: 20,
@@ -618,7 +586,8 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   demoBadgeText: {
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#FFFFFF',
     fontSize: 12,
   },
@@ -639,13 +608,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   demoCardTitle: {
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#FFFFFF',
     fontSize: 18,
     marginBottom: 4,
   },
   demoCardDesc: {
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#E0E7FF',
     fontSize: 14,
     lineHeight: 20,

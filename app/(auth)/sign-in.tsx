@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { router } from 'expo-router';
-import { ArrowLeft, Eye, EyeOff } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function SignInScreen() {
@@ -40,7 +40,7 @@ export default function SignInScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <ArrowLeft size={24} color="#1e293b" />
+        <MaterialIcons name="arrow-back" size={24} color="#1e293b" />
       </TouchableOpacity>
 
       <View style={styles.content}>
@@ -78,11 +78,7 @@ export default function SignInScreen() {
                 style={styles.passwordToggle}
                 onPress={() => setShowPassword(!showPassword)}
               >
-                {showPassword ? (
-                  <EyeOff size={20} color="#64748b" />
-                ) : (
-                  <Eye size={20} color="#64748b" />
-                )}
+                <MaterialIcons name={showPassword ? "visibility-off" : "visibility"} size={22} color="#64748b" />
               </TouchableOpacity>
             </View>
           </View>
@@ -131,13 +127,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   form: {
@@ -148,65 +146,77 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   input: {
     backgroundColor: '#ffffff',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    borderRadius: 14,
+    paddingHorizontal: 18,
+    paddingVertical: 18,
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
-    borderWidth: 1,
+    fontWeight: '300',
+    fontFamily: 'System',
+    borderWidth: 1.2,
     borderColor: '#e2e8f0',
   },
   passwordContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#ffffff',
-    borderRadius: 12,
-    borderWidth: 1,
+    borderRadius: 14,
+    borderWidth: 1.2,
     borderColor: '#e2e8f0',
   },
   passwordInput: {
     flex: 1,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingHorizontal: 18,
+    paddingVertical: 18,
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
   },
   passwordToggle: {
     paddingHorizontal: 16,
   },
   signInButton: {
-    backgroundColor: '#10B981',
-    borderRadius: 12,
-    paddingVertical: 16,
+    backgroundColor: '#14b8a6',
+    borderRadius: 16,
+    paddingVertical: 18,
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: 18,
+    shadowColor: '#14b8a6',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    elevation: 6,
   },
   disabledButton: {
     opacity: 0.6,
   },
   signInButtonText: {
-    fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontSize: 17,
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#ffffff',
+    letterSpacing: 0.1,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 24,
+    marginTop: 28,
   },
   footerText: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   footerLink: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
 });
