@@ -253,7 +253,8 @@ export default function ProgressLogScreen() {
         {/* Submit Button */}
         <TouchableOpacity
           style={[
-            styles.submitButton,
+            styles.bookButton,
+            styles.bookButtonSolid,
             loading && styles.submitButtonDisabled,
             { borderRadius: screenWidth * 0.045, marginTop: screenWidth * 0.02, marginBottom: screenWidth * 0.055 }
           ]}
@@ -261,15 +262,10 @@ export default function ProgressLogScreen() {
           disabled={loading}
           activeOpacity={0.8}
         >
-          <LinearGradient
-            colors={loading ? ['#9ca3af', '#6b7280'] : ['#14b8a6', '#0d9488']}
-            style={[styles.submitButtonGradient, { paddingVertical: screenWidth * 0.048, paddingHorizontal: screenWidth * 0.06 }]}
-          >
-            <MaterialIcons name="save" size={scaleFont(22)} color="#ffffff" />
-            <Text style={[styles.submitButtonText, { fontSize: scaleFont(18) }]}>
-              {loading ? 'Saving Progress...' : 'Save Today\'s Progress'}
-            </Text>
-          </LinearGradient>
+          <MaterialIcons name="save" size={scaleFont(20)} color="#14b8a6" />
+          <Text style={styles.bookButtonText}>
+            {loading ? 'Saving Progress...' : 'Save Today\'s Progress'}
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -458,5 +454,30 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     letterSpacing: 0.5,
     fontFamily: 'System',
+  },
+  // Add styles from search.tsx for bookButton, bookButtonSolid, and bookButtonText
+  bookButton: {
+    flex: 1,
+    borderRadius: 12,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bookButtonSolid: {
+    backgroundColor: 'rgba(20,184,166,0.12)',
+    borderWidth: 1,
+    borderColor: '#14b8a6',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 14,
+  },
+  bookButtonText: {
+    fontSize: 16,
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
+    marginLeft: 8,
   },
 });
