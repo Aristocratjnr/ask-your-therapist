@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Alert, Image, ActivityIndicator, RefreshControl } from 'react-native';
-import { Search, Filter, MapPin, Star, Clock, Heart, ChevronRight, Award, Calendar } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { supabase } from '@/lib/supabase';
@@ -150,7 +150,7 @@ const SearchScreen = () => {
   if (loading && !refreshing) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#10B981" />
+        <ActivityIndicator size="large" color="#14b8a6" />
         <Text style={styles.loadingText}>Finding qualified therapists...</Text>
       </View>
     );
@@ -158,20 +158,13 @@ const SearchScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Enhanced Header with Gradient Background */}
-      <LinearGradient
-        colors={['#10B981', '#059669']}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }}
-        style={styles.header}
-      >
+      {/* Header with solid background */}
+      <View style={styles.headerSolid}>
         <Text style={styles.headerTitle}>Find Your Therapist</Text>
         <Text style={styles.headerSubtitle}>Connect with certified professionals</Text>
-        
-        {/* Search Bar */}
         <View style={styles.searchContainer}>
           <View style={styles.searchInputContainer}>
-            <Search size={20} color="#94a3b8" />
+            <MaterialIcons name="search" size={20} color="#94a3b8" />
             <TextInput
               style={styles.searchInput}
               placeholder="Search by name, specialty or location"
@@ -186,10 +179,10 @@ const SearchScreen = () => {
             )}
           </View>
           <TouchableOpacity style={styles.filterButton}>
-            <Filter size={20} color="#ffffff" />
+            <MaterialIcons name="filter-list" size={20} color="#ffffff" />
           </TouchableOpacity>
         </View>
-      </LinearGradient>
+      </View>
 
       {/* Specialty Filter Chips */}
       <View style={styles.specialtyContainer}>
@@ -235,14 +228,14 @@ const SearchScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={loadTherapists}
-            colors={['#10B981']}
-            tintColor="#10B981"
+            colors={['#14b8a6']}
+            tintColor="#14b8a6"
           />
         }
       >
         {filteredTherapists.length === 0 ? (
           <View style={styles.emptyState}>
-            <Heart size={48} color="#cbd5e1" />
+            <MaterialIcons name="favorite" size={48} color="#cbd5e1" />
             <Text style={styles.emptyTitle}>No therapists found</Text>
             <Text style={styles.emptyText}>
               {searchQuery || selectedSpecialty 
@@ -279,7 +272,7 @@ const SearchScreen = () => {
                   <View style={styles.nameRatingContainer}>
                     <Text style={styles.therapistName}>{therapist.name}</Text>
                     <View style={styles.ratingContainer}>
-                      <Star size={14} color="#f59e0b" fill="#f59e0b" />
+                      <MaterialIcons name="star" size={14} color="#f59e0b" />
                       <Text style={styles.ratingText}>
                         {therapist.rating} ({therapist.review_count})
                       </Text>
@@ -288,11 +281,11 @@ const SearchScreen = () => {
                   
                   <View style={styles.metaContainer}>
                     <View style={styles.metaItem}>
-                      <MapPin size={14} color="#64748b" />
+                      <MaterialIcons name="location-on" size={14} color="#64748b" />
                       <Text style={styles.metaText}>{therapist.location || 'Remote'}</Text>
                     </View>
                     <View style={styles.metaItem}>
-                      <Calendar size={14} color="#64748b" />
+                      <MaterialIcons name="calendar-today" size={14} color="#64748b" />
                       <Text style={styles.metaText}>{therapist.experience_years} years exp</Text>
                     </View>
                   </View>
@@ -329,7 +322,7 @@ const SearchScreen = () => {
                   onPress={() => handleViewProfile(therapist.id)}
                 >
                   <Text style={styles.profileButtonText}>View Profile</Text>
-                  <ChevronRight size={16} color="#10B981" />
+                  <MaterialIcons name="chevron-right" size={16} color="#14b8a6" />
                 </TouchableOpacity>
                 
                 <TouchableOpacity 
@@ -337,12 +330,12 @@ const SearchScreen = () => {
                   onPress={() => handleBookAppointment(therapist.id)}
                 >
                   <LinearGradient
-                    colors={['#10B981', '#059669']}
+                    colors={['#14b8a6', '#059669']}
                     style={styles.bookButtonGradient}
                     start={{ x: 0, y: 0 }}
                     end={{ x: 1, y: 0 }}
                   >
-                    <Clock size={16} color="#ffffff" />
+                    <MaterialIcons name="schedule" size={16} color="#ffffff" />
                     <Text style={styles.bookButtonText}>Book Session</Text>
                   </LinearGradient>
                 </TouchableOpacity>
@@ -369,7 +362,8 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   header: {
@@ -381,14 +375,16 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontFamily: 'Inter-Bold',
-    color: '#ffffff',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#1e293b',
     marginBottom: 4,
   },
   headerSubtitle: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
-    color: 'rgba(255, 255, 255, 0.9)',
+    fontWeight: '300',
+    fontFamily: 'System',
+    color: '#64748b',
     marginBottom: 20,
   },
   searchContainer: {
@@ -408,7 +404,8 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
     marginLeft: 8,
   },
@@ -449,11 +446,13 @@ const styles = StyleSheet.create({
   },
   specialtyText: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   selectedSpecialtyText: {
     color: '#ffffff',
+    fontWeight: '400',
   },
   resultsContainer: {
     paddingHorizontal: 24,
@@ -461,7 +460,8 @@ const styles = StyleSheet.create({
   },
   resultsText: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   content: {
@@ -475,14 +475,16 @@ const styles = StyleSheet.create({
   },
   emptyTitle: {
     fontSize: 18,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     marginTop: 16,
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 16,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     textAlign: 'center',
     marginBottom: 24,
@@ -495,7 +497,8 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   therapistCard: {
@@ -545,7 +548,8 @@ const styles = StyleSheet.create({
   },
   therapistName: {
     fontSize: 18,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   ratingContainer: {
@@ -554,7 +558,8 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
     marginLeft: 4,
   },
@@ -568,7 +573,8 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginLeft: 4,
   },
@@ -577,17 +583,20 @@ const styles = StyleSheet.create({
   },
   priceText: {
     fontSize: 18,
-    fontFamily: 'Inter-Bold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   priceLabel: {
     fontSize: 12,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   bio: {
     fontSize: 15,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     lineHeight: 22,
     marginBottom: 16,
@@ -606,8 +615,9 @@ const styles = StyleSheet.create({
   },
   specialtyTagText: {
     fontSize: 12,
-    fontFamily: 'Inter-SemiBold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   moreSpecialties: {
     backgroundColor: '#f8fafc',
@@ -617,7 +627,8 @@ const styles = StyleSheet.create({
   },
   moreSpecialtiesText: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   actionButtons: {
@@ -637,8 +648,9 @@ const styles = StyleSheet.create({
   },
   profileButtonText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
     marginRight: 4,
   },
   bookButton: {
@@ -654,9 +666,18 @@ const styles = StyleSheet.create({
   },
   bookButtonText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
     marginLeft: 8,
+  },
+  headerSolid: {
+    paddingTop: 60,
+    paddingBottom: 24,
+    paddingHorizontal: 24,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    backgroundColor: '#f8fafc',
   },
 });
 

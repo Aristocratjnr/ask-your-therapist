@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, TextInput, Image, ActivityIndicator, Dimensions, useWindowDimensions, PixelRatio, Platform } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, Calendar, Clock, User, CheckCircle, Camera, Star, MapPin } from 'lucide-react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
@@ -231,7 +231,7 @@ export default function BookingScreen() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#10B981" />
+        <ActivityIndicator size="large" color="#14b8a6" />
         <Text style={[styles.loadingText, { fontSize: scaleFont(16) }]}>Loading therapist details...</Text>
       </View>
     );
@@ -258,13 +258,13 @@ export default function BookingScreen() {
     <View style={styles.container}>
       {/* Header */}
       <LinearGradient
-        colors={['#10B981', '#059669']}
+        colors={['#14b8a6', '#059669']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
         style={[styles.header, { paddingHorizontal: screenWidth * 0.06 }]}
       >
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()} activeOpacity={0.7} accessibilityLabel="Go back" hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <ArrowLeft size={24} color="#ffffff" />
+          <MaterialIcons name="arrow-back" size={24} color="#ffffff" />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, { fontSize: scaleFont(18) }]}>Book Session</Text>
         <View style={styles.headerButton} />
@@ -282,21 +282,19 @@ export default function BookingScreen() {
               <Image source={{ uri: therapist.users.photo_url }} style={styles.therapistImage} />
             ) : (
               <View style={styles.therapistImagePlaceholder}>
-                <User size={28} color="#64748b" />
+                <MaterialIcons name="person" size={28} color="#64748b" />
               </View>
             )}
             <View style={styles.therapistDetails}>
-              <Text style={[styles.therapistName, { fontSize: scaleFont(18) }]}>
-                {therapist.users?.name || 'Licensed Therapist'}
-              </Text>
+              <Text style={[styles.therapistName, { fontSize: scaleFont(18) }]}> {therapist.users?.name || 'Licensed Therapist'} </Text>
               <Text style={[styles.therapistCredentials, { fontSize: scaleFont(14) }]}>{therapist.credentials}</Text>
               <View style={styles.ratingContainer}>
-                <Star size={16} color="#F59E0B" fill="#F59E0B" />
+                <MaterialIcons name="star" size={16} color="#F59E0B" />
                 <Text style={[styles.ratingText, { fontSize: scaleFont(13) }]}>4.9 (128 reviews)</Text>
               </View>
               {therapist.users?.location && (
                 <View style={styles.locationContainer}>
-                  <MapPin size={16} color="#64748b" />
+                  <MaterialIcons name="location-on" size={16} color="#64748b" />
                   <Text style={[styles.locationText, { fontSize: scaleFont(13) }]}>{therapist.users.location}</Text>
                 </View>
               )}
@@ -311,7 +309,7 @@ export default function BookingScreen() {
         {/* Date Selection */}
         <View style={[styles.section, { marginHorizontal: screenWidth * 0.04 }]}> 
           <View style={styles.sectionHeader}>
-            <Calendar size={20} color="#10B981" />
+            <MaterialIcons name="calendar-today" size={20} color="#14b8a6" />
             <Text style={[styles.sectionTitle, { fontSize: scaleFont(16) }]}>Select Date</Text>
           </View>
           <ScrollView 
@@ -331,15 +329,9 @@ export default function BookingScreen() {
                   accessibilityLabel={`Select date ${dateInfo.day} ${dateInfo.month} ${dateInfo.date}`}
                   hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
                 >
-                  <Text style={[styles.dayText, { fontSize: scaleFont(12) }, isSelected && styles.selectedDateText]}>
-                    {dateInfo.day}
-                  </Text>
-                  <Text style={[styles.dateNumber, { fontSize: scaleFont(18) }, isSelected && styles.selectedDateText]}>
-                    {dateInfo.date}
-                  </Text>
-                  <Text style={[styles.monthText, { fontSize: scaleFont(12) }, isSelected && styles.selectedDateText]}>
-                    {dateInfo.month}
-                  </Text>
+                  <Text style={[styles.dayText, { fontSize: scaleFont(12) }, isSelected && styles.selectedDateText]}> {dateInfo.day} </Text>
+                  <Text style={[styles.dateNumber, { fontSize: scaleFont(18) }, isSelected && styles.selectedDateText]}> {dateInfo.date} </Text>
+                  <Text style={[styles.monthText, { fontSize: scaleFont(12) }, isSelected && styles.selectedDateText]}> {dateInfo.month} </Text>
                 </TouchableOpacity>
               );
             })}
@@ -349,7 +341,7 @@ export default function BookingScreen() {
         {/* Time Selection */}
         <View style={[styles.section, { marginHorizontal: screenWidth * 0.04 }]}> 
           <View style={styles.sectionHeader}>
-            <Clock size={20} color="#10B981" />
+            <MaterialIcons name="schedule" size={20} color="#14b8a6" />
             <Text style={[styles.sectionTitle, { fontSize: scaleFont(16) }]}>Select Time</Text>
           </View>
           <View style={styles.timeGrid}>
@@ -386,7 +378,7 @@ export default function BookingScreen() {
         {/* Duration Selection */}
         <View style={[styles.section, { marginHorizontal: screenWidth * 0.04 }]}> 
           <View style={styles.sectionHeader}>
-            <Clock size={20} color="#10B981" />
+            <MaterialIcons name="schedule" size={20} color="#14b8a6" />
             <Text style={[styles.sectionTitle, { fontSize: scaleFont(16) }]}>Session Duration</Text>
           </View>
           <View style={styles.durationContainer}>
@@ -422,7 +414,7 @@ export default function BookingScreen() {
         {/* Notes */}
         <View style={[styles.section, { marginHorizontal: screenWidth * 0.04 }]}> 
           <View style={styles.sectionHeader}>
-            <User size={20} color="#10B981" />
+            <MaterialIcons name="person" size={20} color="#14b8a6" />
             <Text style={[styles.sectionTitle, { fontSize: scaleFont(16) }]}>Additional Notes</Text>
           </View>
           <TextInput
@@ -443,19 +435,11 @@ export default function BookingScreen() {
           <Text style={[styles.summaryTitle, { fontSize: scaleFont(18) }]}>Booking Summary</Text>
           <View style={styles.summaryRow}>
             <Text style={[styles.summaryLabel, { fontSize: scaleFont(14) }]}>Therapist</Text>
-            <Text style={[styles.summaryValue, { fontSize: scaleFont(14) }]}>
-              {therapist.users?.name || 'Licensed Therapist'}
-            </Text>
+            <Text style={[styles.summaryValue, { fontSize: scaleFont(14) }]}> {therapist.users?.name || 'Licensed Therapist'} </Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={[styles.summaryLabel, { fontSize: scaleFont(14) }]}>Date</Text>
-            <Text style={[styles.summaryValue, { fontSize: scaleFont(14) }]}>
-              {selectedDate.toLocaleDateString('en-US', { 
-                weekday: 'short', 
-                month: 'short', 
-                day: 'numeric' 
-              })}
-            </Text>
+            <Text style={[styles.summaryValue, { fontSize: scaleFont(14) }]}> {selectedDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} </Text>
           </View>
           <View style={styles.summaryRow}>
             <Text style={[styles.summaryLabel, { fontSize: scaleFont(14) }]}>Time</Text>
@@ -483,7 +467,7 @@ export default function BookingScreen() {
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
         >
           <LinearGradient
-            colors={['#10B981', '#059669']}
+            colors={['#14b8a6', '#059669']}
             style={styles.bookButtonGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
@@ -492,7 +476,7 @@ export default function BookingScreen() {
               <ActivityIndicator color="#ffffff" />
             ) : (
               <>
-                <CheckCircle size={20} color="#ffffff" />
+                <MaterialIcons name="check-circle" size={20} color="#ffffff" />
                 <Text style={[styles.bookButtonText, { fontSize: scaleFont(16) }]}>Confirm Booking</Text>
               </>
             )}
@@ -517,7 +501,8 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginTop: 16,
   },
@@ -530,16 +515,17 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#ef4444',
     marginBottom: 20,
   },
   retryButton: {
-    backgroundColor: '#10B981',
+    backgroundColor: '#14b8a6',
     borderRadius: 12,
     paddingHorizontal: 24,
     paddingVertical: 12,
-    shadowColor: '#10B981',
+    shadowColor: '#14b8a6',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -547,7 +533,8 @@ const styles = StyleSheet.create({
   },
   retryButtonText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   header: {
@@ -567,7 +554,8 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
   headerButton: {
@@ -625,13 +613,15 @@ const styles = StyleSheet.create({
   },
   therapistName: {
     fontSize: 18,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 4,
   },
   therapistCredentials: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginBottom: 6,
   },
@@ -642,7 +632,8 @@ const styles = StyleSheet.create({
   },
   ratingText: {
     fontSize: 13,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginLeft: 4,
   },
@@ -652,7 +643,8 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 13,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginLeft: 4,
   },
@@ -662,12 +654,14 @@ const styles = StyleSheet.create({
   },
   rateText: {
     fontSize: 18,
-    fontFamily: 'Inter-Bold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   rateLabel: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   section: {
@@ -690,7 +684,8 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   dateScrollContent: {
@@ -707,24 +702,27 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
   },
   selectedDateCard: {
-    backgroundColor: '#10B981',
-    borderColor: '#10B981',
+    backgroundColor: '#14b8a6',
+    borderColor: '#14b8a6',
   },
   dayText: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
     marginBottom: 4,
   },
   dateNumber: {
     fontSize: 18,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 4,
   },
   monthText: {
     fontSize: 12,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   selectedDateText: {
@@ -746,8 +744,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   selectedTimeSlot: {
-    backgroundColor: '#10B981',
-    borderColor: '#10B981',
+    backgroundColor: '#14b8a6',
+    borderColor: '#14b8a6',
   },
   disabledTimeSlot: {
     backgroundColor: '#f8fafc',
@@ -755,7 +753,8 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   selectedTimeText: {
@@ -766,7 +765,8 @@ const styles = StyleSheet.create({
   },
   slotStatusText: {
     fontSize: 10,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#94a3b8',
     marginTop: 4,
   },
@@ -782,24 +782,26 @@ const styles = StyleSheet.create({
   },
   selectedDuration: {
     backgroundColor: '#f0fdf4',
-    borderColor: '#10B981',
+    borderColor: '#14b8a6',
   },
   durationText: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     textAlign: 'center',
   },
   selectedDurationText: {
-    color: '#10B981',
+    color: '#14b8a6',
   },
   durationPrice: {
     marginTop: 8,
   },
   durationPriceText: {
     fontSize: 13,
-    fontFamily: 'Inter-Medium',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
     textAlign: 'center',
   },
   notesInput: {
@@ -808,7 +810,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 16,
     fontSize: 14,
-    fontFamily: 'Inter-Regular',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#1e293b',
     backgroundColor: '#ffffff',
     minHeight: 120,
@@ -828,7 +831,8 @@ const styles = StyleSheet.create({
   },
   summaryTitle: {
     fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
     marginBottom: 16,
   },
@@ -842,12 +846,14 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontWeight: '300',
+    fontFamily: 'System',
     color: '#64748b',
   },
   summaryValue: {
     fontSize: 14,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   totalRow: {
@@ -856,13 +862,15 @@ const styles = StyleSheet.create({
   },
   totalLabel: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#1e293b',
   },
   totalValue: {
     fontSize: 16,
-    fontFamily: 'Inter-Bold',
-    color: '#10B981',
+    fontWeight: '400',
+    fontFamily: 'System',
+    color: '#14b8a6',
   },
   bottomContainer: {
     position: 'absolute',
@@ -882,7 +890,7 @@ const styles = StyleSheet.create({
   bookButton: {
     borderRadius: 16,
     overflow: 'hidden',
-    shadowColor: '#10B981',
+    shadowColor: '#14b8a6',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -900,7 +908,8 @@ const styles = StyleSheet.create({
   },
   bookButtonText: {
     fontSize: 16,
-    fontFamily: 'Inter-Bold',
+    fontWeight: '400',
+    fontFamily: 'System',
     color: '#ffffff',
   },
 });
