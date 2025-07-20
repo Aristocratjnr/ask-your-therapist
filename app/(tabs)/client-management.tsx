@@ -9,7 +9,8 @@ import {
   Image,
   Dimensions,
   useWindowDimensions,
-  PixelRatio
+  PixelRatio,
+  ActivityIndicator
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { supabase } from '@/lib/supabase';
@@ -17,6 +18,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { router } from 'expo-router';
 import { useMessaging } from '@/contexts/MessagingContext';
 import { LinearGradient } from 'expo-linear-gradient';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const scaleFont = (size: number) => {
@@ -154,16 +156,27 @@ export default function ClientManagementScreen() {
             color="#14b8a6" 
             style={{ marginBottom: screenWidth * 0.03 }}
           />
-          <Text style={[styles.headerTitle, { fontSize: scaleFont(24) }]}>Client Management</Text>
-          <Text style={[styles.headerSubtitle, { fontSize: scaleFont(14) }]}>Monitor your clients' progress</Text>
+          <Text style={[styles.headerTitle, { fontSize: scaleFont(26), fontWeight: '600' }]}>Client Management</Text>
+          <Text style={[styles.headerSubtitle, { fontSize: scaleFont(15) }]}>Monitor your clients' progress</Text>
         </View>
       </LinearGradient>
 
       {/* Content */}
       <View style={[styles.contentWithMargin, { padding: screenWidth * 0.05 }]}>
-        <Text style={[styles.sectionTitle, { fontSize: scaleFont(18) }]}>
-          Active Clients ({clients.length})
-        </Text>
+        <Text style={[styles.sectionTitle, { fontSize: scaleFont(20), fontWeight: '600' }]}>Active Clients ({clients.length})</Text>
+
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#14b8a6" />
+          </View>
+        )}
+
+        {!loading && clients.length === 0 && (
+          <View style={styles.emptyStateContainer}>
+            <MaterialCommunityIcons name="account-group-outline" size={scaleFont(48)} color="#cbd5e1" />
+            <Text style={styles.emptyStateText}>No clients found yet.</Text>
+          </View>
+        )}
 
         {clients.map((client, idx) => (
           <View
@@ -173,8 +186,8 @@ export default function ClientManagementScreen() {
               idx === 0 && styles.firstCard,
               { 
                 padding: screenWidth * 0.04,
-                marginBottom: screenWidth * 0.03,
-                borderRadius: screenWidth * 0.04
+                marginBottom: screenWidth * 0.04,
+                borderRadius: screenWidth * 0.045
               }
             ]}
           >
@@ -188,29 +201,32 @@ export default function ClientManagementScreen() {
                     { 
                       width: screenWidth * 0.12,
                       height: screenWidth * 0.12,
-                      borderRadius: screenWidth * 0.06
+                      borderRadius: screenWidth * 0.06,
+                      borderWidth: 2,
+                      borderColor: '#14b8a6',
                     }
                   ]}
                 />
               ) : (
-                <View style={[
-                  styles.clientAvatarPlaceholder,
-                  { 
-                    width: screenWidth * 0.12,
-                    height: screenWidth * 0.12,
-                    borderRadius: screenWidth * 0.06
-                  }
-                ]}>
-                  <Text style={[styles.clientInitials, { fontSize: scaleFont(18) }]}>
-                    {client.name?.charAt(0) || 'C'}
-                  </Text>
-                </View>
+                <LinearGradient
+                  colors={["#14b8a6", "#06b6d4"]}
+                  style={[
+                    styles.clientAvatarPlaceholder,
+                    { 
+                      width: screenWidth * 0.12,
+                      height: screenWidth * 0.12,
+                      borderRadius: screenWidth * 0.06,
+                      borderWidth: 2,
+                      borderColor: '#14b8a6',
+                    }
+                  ]}
+                >
+                  <Text style={[styles.clientInitials, { fontSize: scaleFont(20), fontWeight: '600' }]}> {client.name?.charAt(0) || 'C'} </Text>
+                </LinearGradient>
               )}
               <View style={styles.clientInfo}>
-                <Text style={[styles.clientName, { fontSize: scaleFont(16) }]}>{client.name}</Text>
-                <Text style={[styles.clientCondition, { fontSize: scaleFont(14) }]}>
-                  {client.condition || 'No condition specified'}
-                </Text>
+                <Text style={[styles.clientName, { fontSize: scaleFont(17), fontWeight: '600' }]}>{client.name}</Text>
+                <Text style={[styles.clientCondition, { fontSize: scaleFont(14) }]}> {client.condition || 'No condition specified'} </Text>
               </View>
             </View>
 
@@ -225,33 +241,21 @@ export default function ClientManagementScreen() {
               ]}>
                 <View style={styles.progressItem}>
                   <Text style={[styles.progressLabel, { fontSize: scaleFont(12) }]}>Latest Pain</Text>
-                  <Text style={[
-                    styles.progressValue,
-                    { 
-                      fontSize: scaleFont(16),
-                      color: client.recentProgress.pain_level > 6 ? '#ef4444' : '#14b8a6' 
-                    }
-                  ]}>
-                    {client.recentProgress.pain_level}/10
-                  </Text>
+                  <View style={styles.progressPillPain}>
+                    <MaterialCommunityIcons name="heart-pulse" size={scaleFont(14)} color="#ef4444" style={{ marginRight: 2 }} />
+                    <Text style={styles.progressPillText}>{client.recentProgress.pain_level}/10</Text>
+                  </View>
                 </View>
                 <View style={styles.progressItem}>
                   <Text style={[styles.progressLabel, { fontSize: scaleFont(12) }]}>Latest Mood</Text>
-                  <Text style={[
-                    styles.progressValue,
-                    { 
-                      fontSize: scaleFont(16),
-                      color: client.recentProgress.mood_level < 5 ? '#ef4444' : '#14b8a6' 
-                    }
-                  ]}>
-                    {client.recentProgress.mood_level}/10
-                  </Text>
+                  <View style={styles.progressPillMood}>
+                    <FontAwesome name={client.recentProgress.mood_level < 5 ? "frown-o" : "smile-o"} size={scaleFont(14)} color={client.recentProgress.mood_level < 5 ? "#ef4444" : "#14b8a6"} style={{ marginRight: 2 }} />
+                    <Text style={styles.progressPillText}>{client.recentProgress.mood_level}/10</Text>
+                  </View>
                 </View>
                 <View style={styles.progressItem}>
                   <Text style={[styles.progressLabel, { fontSize: scaleFont(12) }]}>Last Update</Text>
-                  <Text style={[styles.progressDate, { fontSize: scaleFont(14) }]}>
-                    {new Date(client.recentProgress.date).toLocaleDateString()}
-                  </Text>
+                  <Text style={[styles.progressDate, { fontSize: scaleFont(14) }]}> {new Date(client.recentProgress.date).toLocaleDateString()} </Text>
                 </View>
               </View>
             )}
@@ -265,7 +269,7 @@ export default function ClientManagementScreen() {
               }
             ]}>
               <TouchableOpacity 
-                style={styles.actionButton}
+                style={styles.actionButtonPolished}
                 onPress={() => router.push(`/client-profile/${client.id}`)}
               >
                 <MaterialIcons name="person" size={scaleFont(18)} color="#14b8a6" />
@@ -273,7 +277,7 @@ export default function ClientManagementScreen() {
               </TouchableOpacity>
               
               <TouchableOpacity 
-                style={styles.actionButton}
+                style={styles.actionButtonPolished}
                 onPress={() => router.push(`/(tabs)/progress-charts?clientId=${client.id}`)}
               >
                 <MaterialIcons name="trending-up" size={scaleFont(18)} color="#14b8a6" />
@@ -281,7 +285,7 @@ export default function ClientManagementScreen() {
               </TouchableOpacity>
               
               <TouchableOpacity 
-                style={styles.actionButton}
+                style={styles.actionButtonPolished}
                 onPress={() => router.push(`/(tabs)/booking?clientId=${client.id}`)}
               >
                 <MaterialIcons name="calendar-today" size={scaleFont(18)} color="#14b8a6" />
@@ -289,7 +293,7 @@ export default function ClientManagementScreen() {
               </TouchableOpacity>
               
               <TouchableOpacity 
-                style={styles.actionButton}
+                style={styles.actionButtonPolished}
                 onPress={() => handleStartConversation(client.id)}
               >
                 <MaterialIcons name="message" size={scaleFont(18)} color="#14b8a6" />
@@ -343,12 +347,13 @@ const styles = StyleSheet.create({
   clientCard: {
     backgroundColor: '#ffffff',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.10,
+    shadowRadius: 12,
+    elevation: 4,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#e0f2f1',
+    marginHorizontal: 2,
   },
   firstCard: {
     marginTop: 8,
@@ -362,7 +367,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   clientAvatarPlaceholder: {
-    backgroundColor: '#14b8a6',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -393,6 +397,8 @@ const styles = StyleSheet.create({
     borderTopColor: '#f3f4f6',
     borderBottomWidth: 1,
     borderBottomColor: '#f3f4f6',
+    backgroundColor: '#f8fafc',
+    borderRadius: 12,
   },
   progressItem: {
     alignItems: 'center',
@@ -418,6 +424,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     borderTopWidth: 1,
     borderTopColor: '#f3f4f6',
+    marginTop: 4,
+    paddingTop: 4,
   },
   actionButton: {
     alignItems: 'center',
@@ -440,5 +448,63 @@ const styles = StyleSheet.create({
     fontFamily: 'System',
     color: '#6b7280',
     textAlign: 'center',
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 40,
+  },
+  emptyStateContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 40,
+  },
+  emptyStateText: {
+    color: '#94a3b8',
+    fontSize: 16,
+    fontWeight: '400',
+    marginTop: 12,
+    textAlign: 'center',
+  },
+  actionButtonPolished: {
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#f0fdfa',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#ccfbf1',
+    minWidth: 60,
+    marginHorizontal: 2,
+    shadowColor: '#14b8a6',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  progressPillPain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fee2e2',
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    marginTop: 2,
+  },
+  progressPillMood: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ccfbf1',
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    marginTop: 2,
+  },
+  progressPillText: {
+    fontWeight: '600',
+    fontFamily: 'System',
+    color: '#1f2937',
+    fontSize: 14,
   },
 });
